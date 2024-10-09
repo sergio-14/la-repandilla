@@ -58,17 +58,13 @@
         
             <!-- Birthdate and CI Section -->
             <div class="row">
-                <div class="col-lg-4 col-12 form-group">
+                <div class="col-lg-6 col-12 form-group">
                     {{ user_form.fecha_nac.label_tag }}
                     {{ user_form.fecha_nac }}
                     {{ user_form.fecha_nac.errors }}
                 </div>
-                <div class="col-lg-4 col-12 form-group">
-                    {{ user_form.Ru.label_tag }}
-                    {{ user_form.Ru }}
-                    {{ user_form.Ru.errors }}
-                </div>
-                <div class="col-lg-4 col-12 form-group">
+                
+                <div class="col-lg-6 col-12 form-group">
                     {{ user_form.telefono.label_tag }}
                     {{ user_form.telefono }}
                 </div>
@@ -79,10 +75,43 @@
                     <h4 class="fontI">Datos Estudiante</h4>
                     {{ estudiante_form|crispy }}
                 </div>
-            {% elif docente_form %}
-                <div class="mb-3 fontII">
+                {% elif docente_form %}
+                <div class="row mb-3 fontII">
                     <h4 class="fontI">Datos Docente</h4>
-                    {{ docente_form|crispy }}
+
+                    <div class="col-6 mb-3 form-group">
+
+                        {{ docente_form.dni.label_tag }}
+
+                        {{ docente_form.dni }}  
+
+                        {{ docente_form.dni.errors }}
+
+                    </div>
+
+
+        
+                    <div class="col-8 mb-3 form-group">
+        
+                        {{ docente_form.especialidad.label_tag }}
+        
+                        {{ docente_form.especialidad }}  
+        
+                        {{ docente_form.especialidad.errors }}
+        
+                    </div>
+
+        
+                    <div class="col-4 mb-3 form-group">
+        
+                        {{ docente_form.titulo.label_tag }}
+        
+                        {{ docente_form.titulo }} 
+        
+                        {{ docente_form.titulo.errors }}
+        
+                    </div>
+    
                 </div>
             {% endif %}
         

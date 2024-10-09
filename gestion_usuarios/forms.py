@@ -48,15 +48,20 @@ class CustomLoginForm(forms.Form):
 
 # Validaciones para registrar nuevo usuario
 class CustomUserCreationForm(UserCreationForm):
+    groups = forms.ModelMultipleChoiceField(
+        queryset=Group.objects.all(),
+        required=False,
+        widget=forms.CheckboxSelectMultiple
+    )
     class Meta:
         model = User
         fields = ('email', 'nombre', 'apellido', 'Ru',  'is_active', 'is_staff','is_superuser', 'password1', 'password2', 'groups')
         widgets = {
-            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input', 'role': 'switch', 'id': 'flexSwitchCheckActive'}),
-            'is_staff': forms.CheckboxInput(attrs={'class': 'form-check-input', 'role': 'switch', 'id': 'flexSwitchCheckStaff'}),
-            'is_superuser': forms.CheckboxInput(attrs={'class': 'form-check-input', 'role': 'switch', 'id': 'flexSwitchCheckSuperuser'}),
-        }
-
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input danger-switch', 'role': 'switch', 'id': 'flexSwitchCheckActive'}),
+            'is_staff': forms.CheckboxInput(attrs={'class': 'form-check-input danger-switch', 'role': 'switch', 'id': 'flexSwitchCheckStaff'}),
+            'is_superuser': forms.CheckboxInput(attrs={'class': 'form-check-input danger-switch', 'role': 'switch', 'id': 'flexSwitchCheckSuperuser'}),
+}
+       
     def clean_password1(self):
         password1 = self.cleaned_data.get("password1")
 
@@ -106,9 +111,12 @@ class CustomUserCreationForm(UserCreationForm):
                     Docente.objects.create(user=user)
 
         return user
+    def get_available_groups(self):
+        return Group.objects.exclude(id__in=self.instance.groups.values_list('id', flat=True))
 
 # Formulario para actualizar usuario
 class CustomUserChangeForm(forms.ModelForm):
+    
     class Meta:
         model = User
         fields = ('email', 'nombre', 'apellido', 'imagen', 'Ru', 'fecha_nac', 'telefono', 'is_active', 'is_staff','is_superuser', 'groups')
@@ -181,7 +189,7 @@ class EstudianteUpdateForm(forms.ModelForm):
         model = Estudiante
         fields = ['dni', 'carrera']
         labels = {
-            'dni': 'DNI del Estudiante',
+            'dni': 'Carnet de Identidad',
             'carrera': 'Carrera',
         }
 
@@ -191,7 +199,7 @@ class DocenteUpdateForm(forms.ModelForm):
         model = Docente
         fields = ['dni', 'especialidad', 'titulo']
         labels = {
-            'dni': 'DNI del Docente',
-            'especialidad': 'Especialidad',
-            'titulo': 'Título',
+            'dni': 'Carnet de Identidad',
+            'especialidad': 'Título',
+            'titulo': 'Abreviación ',
         }

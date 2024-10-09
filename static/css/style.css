@@ -329,7 +329,16 @@ select {
   text-align: left;
   padding: 5px;
 }
+.danger-switch {
+  background-color: white; /* Color de fondo rojo claro */
+  border: 1px solid rgb(18, 23, 68); /* Borde rojo claro */
+}
 
+
+.danger-switch:disabled {
+  background-color: white; /* Color de fondo gris cuando está deshabilitado */
+  border: 1px solid rgb(18, 23, 68); /* Borde gris */
+}
 .contdoc {
   border-radius: 5px;
   background: #ebeaea;
@@ -461,7 +470,7 @@ select {
   width: 250px;
   height: 100vh;
   overflow-y: auto;
-  background: #021d46;
+  background: #032457;
   transition: 0.5s;
   z-index: 999;
 }

@@ -64,7 +64,7 @@
         <div class="col-md-7 col-lg-8 pb-5">
           <div class="card-body">
             <!-- Texto con formato pre -->
-            <pre class="fecha fontI colorestados">Estudiante: <span id="profileName" class="estado colortext">{{ actividad.estudiante.nombre }} {{ actividad.estudiante.apellido }}</span>       Fecha: {{ actividad.fecha|date:"d/m/Y" }}</pre>
+            <pre class="fecha fontI colorestados">Estudiante: <span id="profileName" class="estado colortext">{{ actividad.estudiante.nombre }} {{ actividad.estudiante.apellido }}</span>       Fecha: <span class="colortext">{{ actividad.fecha|date:"d/m/Y" }}</span></pre>
             <!-- Título -->
             <h5 class="title text-center fontI colortitle pb-2">{{ actividad.titulo }}</h5>
             <div class="row pb-3">
@@ -75,7 +75,7 @@
                       <img src="{% static 'img/SINFOTO.webp' %}" class="rounded-img" alt="Sin foto">
                     {% endif %}
                     <p class="fontI fechas colorestados pt-1">Tutor Asignado:<br>
-                      {{ actividad.tutor.nombre }}<br> {{ actividad.tutor.apellido }}</p>
+                      <span class="colortext">{{ actividad.tutor.nombre }}<br> {{ actividad.tutor.apellido }}</span></p>
                 </div>
                 <div class="col-6 col-md-3">
                     {% if actividad.jurado_1.imagen %}
@@ -84,7 +84,7 @@
                       <img src="{% static 'img/SINFOTO.webp' %}" class="rounded-img" alt="Sin foto">
                     {% endif %}
                     <p class="fontI fechas colorestados pt-1">Tribunal Calificador:
-                      <br> {{ actividad.jurado_1.nombre }}<br> {{ actividad.jurado_1.apellido }}</p>
+                      <br> <span class="colortext">{{ actividad.jurado_1.nombre }}<br> {{ actividad.jurado_1.apellido }}</span></p>
                     <div class="form-check fontI fechas colortext">
                     <input class="form-check-input " type="checkbox" id="jurado_1_aprobado" name="jurado_1_aprobado" {% if actividad.jurado_1_aprobado %}checked{% endif %} disabled>
                       <label class="form-check-label" for="jurado_1_aprobado">
@@ -103,7 +103,7 @@
                       <img src="{% static 'img/SINFOTO.webp' %}" class="rounded-img" alt="Sin foto">
                     {% endif %}
                     <p class="fontI fechas colorestados pt-1">Tribunal Calificador:
-                      <br>{{ actividad.jurado_2.nombre }}<br> {{ actividad.jurado_2.apellido }}</p>
+                      <br><span class="colortext">{{ actividad.jurado_2.nombre }}<br> {{ actividad.jurado_2.apellido }}</span></p>
                     <div class="form-check fontI fechas colortext">
                       <input class="form-check-input" type="checkbox" id="jurado_2_aprobado" name="jurado_2_aprobado" {% if actividad.jurado_2_aprobado %}checked{% endif %} disabled>
                       <label class="form-check-label" for="jurado_2_aprobado">
@@ -122,7 +122,7 @@
                       <img src="{% static 'img/SINFOTO.webp' %}" class="rounded-img" alt="Sin foto">
                     {% endif %}
                     <p class="fontI fechas colorestados pt-1">Tribunal Calificador: 
-                      <br>{{ actividad.jurado_3.nombre }}<br> {{ actividad.jurado_3.apellido }}</p>
+                      <br><span class="colortext">{{ actividad.jurado_3.nombre }}<br> {{ actividad.jurado_3.apellido }}</span></p>
                     <div class="form-check fontI fechas colortext">
                       <input class="form-check-input" type="checkbox" id="jurado_3_aprobado" name="jurado_3_aprobado" {% if actividad.jurado_3_aprobado %}checked{% endif %} disabled>
                       <label id="aaa" class="form-check-label" for="jurado_3_aprobado">
@@ -139,7 +139,7 @@
             <div class=" text-center">
               <div class="row">
                 <div class="col-md-3 col-6">
-                  <h5 class="text colortext fontI mt-1 ">Revision General: {{ actividad.estado }}</h5>
+                  <h5 class="text colorestados fontI mt-1 ">Revision General: <span class="colortext">{{ actividad.estado }}</span></h5>
                 </div>
                 <div class="col-6 col-md-4">
                   <div class="d-flex align-items-center text fontI contdoc p-1 mt-2">
@@ -147,7 +147,7 @@
                       <path d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1M7 6.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m-.861 1.542 1.33.886 1.854-1.855a.25.25 0 0 1 .289-.047l1.888.974V9.5a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V9s1.54-1.274 1.639-1.208M5 11h6a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1m0 2h3a.5.5 0 0 1 0 1H5a.5.5 0 0 1 0-1"/>
                     </svg>
                     {% if actividad.documentacion %}
-                    <a href="{{ actividad.documentacion.url }}" class="list-group-item ">Documento Evaluar</a>
+                    <a href="{{ actividad.documentacion.url }}" class="list-group-item ">Documento a Evaluar</a>
                   {% else %}
                     <span class="list-group-item  disabled">No hay documento</span>
                   {% endif %}
@@ -158,23 +158,20 @@
                     <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
                     <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
                   </svg> Revisión</a>
-                  {% comment %} <a data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Para el Adm Mod. G." class="btn btn-sm btn-dark mb-1" href="{% url 'revision' actividad.id %}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/>
-                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z"/>
-                  </svg> Revisión</a> {% endcomment %}
+                  
                 </div>
               </div> 
             </div>
              <!-- Comentarios -->
              
               <!--comentarios-->
-              <h5 class="text fontI colortitle text-center pt-3">Comentarios Retroalimentativos</h5>
+              <h5 class="text fontI colortitle text-center pt-3">Comentarios </h5>
               <div class="contenedorcomentarios p-1 pb-4">
                 {% for comentario in actividad.latest_comments%}
                 <h6 class="text-end fontI  colorestados fechas">
                   {{ comentario.actfecha_post|date:"d/m/Y h:i:s A" }} por :  <span class="colortext fontI fecha">{{ comentario.user.docente.titulo }} {{ comentario.user.nombre }} {{ comentario.user.apellido }}</span>
                 </h6>
-                <p class="comentario fontI colortext">Comentarios: {{ comentario.actcomentario }}</p>
+                <p class="comentario fontI colortext"> {{ comentario.actcomentario }}</p>
                 {% if comentario.actdocorregido %}
                 <a href="{{ comentario.actdocorregido.url }}" target="_blank" class="text-decoration-none text-end fontI align-items-end colortext fechas contdoc p-2 ">
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send-check" viewBox="0 0 16 16">

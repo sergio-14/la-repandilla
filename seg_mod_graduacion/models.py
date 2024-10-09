@@ -97,7 +97,7 @@ class InvCientifica(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Usuario relacionado', related_name='name_user')
     user_uno = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Segundo participante', blank=True, null=True, related_name='name_useruno')
     user_dos = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Tercer participante', blank=True, null=True, related_name='name_userdos')
-    habilitar_users = models.BooleanField(default=False, verbose_name='¡Si el proyecto consta mas de un participante click aqui!')
+    habilitar_users = models.BooleanField(default=False, verbose_name='¡Mas de un Estudiante click aqui!')
     invtitulo = models.CharField(max_length=450, verbose_name='Agregar Título')
     slug = models.SlugField(unique=True)
     invfecha_creacion = models.DateTimeField(auto_now_add=True)
@@ -142,7 +142,7 @@ class PerfilProyecto(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Usuario relacionado', related_name='perfil_name_user')
     user_uno = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Segundo participante', blank=True, null=True, related_name='perfil_name_useruno')
     user_dos = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Tercer participante', blank=True, null=True, related_name='perfil_name_userdos')
-    habilitar_users = models.BooleanField(default=False, verbose_name='¡Si el proyecto consta mas de un participante click aqui!')
+    habilitar_users = models.BooleanField(default=False, verbose_name='¡Mas de un Estudiante click aqui!')
     pertitulo = models.CharField(max_length=450, verbose_name='Agregar Título Perfil')
     slug = models.SlugField(unique=True)
     perfecha_creacion = models.DateTimeField(auto_now_add=True)
@@ -354,7 +354,7 @@ class ComentarioProFinal(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     actfecha_post = models.DateTimeField(auto_now_add=True)
     actproyecto_relacionado = models.ForeignKey(ProyectoFinal, on_delete=models.CASCADE, related_name='comentarios')
-    actdocorregido = models.FileField(upload_to='documento/proyectofinal', verbose_name='Agregar Documentacion', null=True, blank=True)
+    actdocorregido = models.FileField(upload_to='documento/proyectofinal', verbose_name='Agregar Documento', null=True, blank=True)
     
     class Meta:
         verbose_name_plural = "Comentarios Proyecto Final"

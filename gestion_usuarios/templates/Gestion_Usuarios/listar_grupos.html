@@ -16,14 +16,14 @@
             <table class="table ">
                 <thead class="">
                     <tr>
-                        <th>NOMBRE GRUPO</th>
+                        <th>GRUPOS</th>
                         <th>ACCIONES</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for grupo in grupos %}
                         <tr>
-                            <td data-label="NOMBRE GRUPO ">{{ grupo.name }}</td>
+                            <td data-label="GRUPOS ">{{ grupo.name }}</td>
                             <td data-label="ACCIONES ">
                                 <a href="{% url 'actualizar_grupo' grupo.id %}" class="btn btn-outline-success btn-sm">Actualizar</a>
                             </td>

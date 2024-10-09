@@ -7,7 +7,6 @@
   <div class="row pb-5 ">
     <div class="col-md-8 no-gutters p-3 offset-md-2 p-lg-4">
       <div class="card no-gutte p-lg-4 p-0">
-        <h2 class="text-center fontI text pt-3 colortitle">Administración de los Tribunales</h2>
         <div class="card-body font px-5 ">
             <form method="POST" enctype="multipart/form-data">
                 {% csrf_token %}
@@ -80,13 +79,13 @@
                     <label for="comentario_texto">Comentario para el Postulante:</label>
                     <textarea class="form-control no-guttee" id="comentario_texto" name="comentario_texto" rows="3" {% if request.user != actividad.jurado_1 and request.user != actividad.jurado_2 and request.user != actividad.jurado_3 %}disabled{% endif %}></textarea>
 
-                    <label class="pt-2 " for="actdocorregido">Agregar Documentación:</label>
+                    <label class="pt-2 " for="actdocorregido">Agregar Documento:</label>
                     <input type="file" name="actdocorregido" id="actdocorregido" class="form-control no-guttee" accept=".pdf,.doc,.docx" {% if request.user != actividad.jurado_1 and request.user != actividad.jurado_2 and request.user != actividad.jurado_3 %}disabled{% endif %}>
                     
                 </div>
             
-                <button type="submit" class="btn btn-dark" {% if request.user != actividad.jurado_1 and request.user != actividad.jurado_2 and request.user != actividad.jurado_3 %}disabled{% endif %}>Enviar Revisión</button>
-                <a class="btn btn-secondary" href="{% url 'listaactividades' %}">Cancelar</a>
+                <button type="submit" class="btn btn-primary" {% if request.user != actividad.jurado_1 and request.user != actividad.jurado_2 and request.user != actividad.jurado_3 %}disabled{% endif %}>Enviar Revisión</button>
+                <a class="btn btn-danger" href="{% url 'listaactividades' %}">Cancelar</a>
             </form>
         </div>
         <br />

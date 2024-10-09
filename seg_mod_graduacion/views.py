@@ -669,7 +669,7 @@ def crear_actividad(request):
                 actividad.fecha = timezone.now()
                 #actividad.estado = 'Pendiente' 
                 actividad.save()
-                return redirect('dashboard')
+                return redirect('lista_actividad')
         else:
             form = ActividadForm(instance=actividad)
     else:

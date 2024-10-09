@@ -4,7 +4,7 @@
 {% load static %}
 
 <article class="container "> 
-    <h1 class="text-center fontI titulosgeneral pb-2">AREA REVISION DE FORMULARIOS PERFIL DE PROYECTO</h1>
+    <h1 class="text-center fontI titulosgeneral pb-2">REVISIÓN DE FORMULARIOS PERFIL DE PROYECTO</h1>
     {% if proyectos.items %}
     {% for proyecto, formulario in proyectos.items %}
     <div class="container">
@@ -20,7 +20,7 @@
                 <div class="col-md-7 px-2">
                     <div class="card-body"><br>
                         <h5 class="title pb-1 fontI colortitle">Título: {{ proyecto.pertitulo }}</h5>
-                        <h6 class="fontI comentario colortext">Modalidad Optada: {{ proyecto.permodalidad.nombre }}</h6>
+                        <h6 class="fontI comentario colortext">Modalidad: {{ proyecto.permodalidad.nombre }}</h6>
                         <h5 class="fontI colorestados">Estudiante: <span id="profileName" class="fontI colortext">{{ proyecto.user.nombre }} {{ proyecto.user.apellido }}</span></h5>
                         <p class="fontI text colortext">Descripción:<br>{{ proyecto.perdescripcion }}</p>
                         <h2 class="no-guttee py-2 col-lg-5 col-6" data-label="Documento Proyecto"><a href="{{ proyecto.perdocumentacion.url }}" class="list-group-item list-group-item-action">
@@ -32,7 +32,7 @@
             </div>
             <br>
              <!-- Formulario para aprobar/rechazar con espacio para agregar comentario -->
-            <p class="px-3 fontI colortext comentario">Comentario Dirigio para el Proyecto</p>
+            <p class="px-3 fontI colortext comentario">Comentario Acerca del Proyecto</p>
             <div class="container fontI colortext px-2">
                 <form id="approvalForm" method="POST" action="{% url 'PerfilesParaAprobar' %}" enctype="multipart/form-data">
                     {% csrf_token %}
@@ -99,7 +99,7 @@
         </script>
     {% endfor %}
     {% else %}
-    <p class="text-center fontI colorestados">Lista Formularios Perfil de Proyectos para Aprobar Vacía</p>
+    <p class="text-center fontI colorestados">La Lista de Formularios de Perfil de Proyectos para Aprobar está Vacía</p>
     {% endif %}
 </article> 
 

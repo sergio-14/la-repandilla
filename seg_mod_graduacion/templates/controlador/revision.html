@@ -45,8 +45,8 @@
           {% if todos_aprobados %}
           <form method="post">
             {% csrf_token %}
-            <button type="submit" name="cambiar_estado" class="btn btn-dark">Enviar Aprobación</button>
-            <a class="btn btn-secondary" href="{% url 'listaractividades' %}">Cancelar</a>
+            <button type="submit" name="cambiar_estado" class="btn btn-primary">Enviar Aprobación</button>
+            <a class="btn btn-danger" href="{% url 'listaractividades' %}">Cancelar</a>
           </form>
           {% else %}
           <p class="fontI text colortext ">Estado actual: {{ actividad.estado }}</p>

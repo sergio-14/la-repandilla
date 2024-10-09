@@ -72,7 +72,7 @@
                     <tbody>
                         {% for actividad in actividades %}
                         <tr class="fontII">
-                            <td data-label="Fecha">{{ actividad.fecha }}</td>
+                            <td data-label="Fecha">{{ actividad.fecha|date:"d/m/Y" }}</td>
                             <td data-label="Imagen" class="descripp"> 
                                 <div class="foto-container" id="fotoContainer">
                                     {% if actividad.estudiante.imagen %}

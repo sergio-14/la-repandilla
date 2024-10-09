@@ -41,8 +41,8 @@
         {% endif %}
         {% if not form_disabled %}
         <br>
-        <input name="" id="" class="btn btn-dark me-2 fontII" type="submit" value="Enviar Informacion" {% if form_disabled %}disabled{% endif %}>
-        <a href="{% url 'dashboard' %}" class="btn btn-secondary fontII ">Cancelar</a>
+        <input name="" id="" class="btn btn-primary me-2 fontII" type="submit" value="Enviar Información" {% if form_disabled %}disabled{% endif %}>
+        <a href="{% url 'dashboard' %}" class="btn btn-danger fontII ">Cancelar</a>
         {% else %}
             <p class="text-end text colorestados">Formulario deshabilitado. Su Perfil de a sido "Aprobado" o Debes tener la investigación "Aprobada" para agregar un perfil.</p>
         {% endif %}
