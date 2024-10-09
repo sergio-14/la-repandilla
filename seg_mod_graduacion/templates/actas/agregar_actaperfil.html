@@ -1,0 +1,314 @@
+{% extends 'dashboard.html' %}
+{% load crispy_forms_tags %}
+{% block title %}Crear Form{% endblock %}
+{% load static %}
+{% block content %}
+<script>
+  $(document).ready(function() {
+    // Inicializar select2 para todos los campos
+    $("#id_estudiante, #id_estudiante_uno, #id_estudiante_dos, #id_jurado_1, #id_jurado_2, #id_jurado_3").select2();
+  
+    // Función para actualizar las opciones
+    function actualizarOpciones() {
+      // Obtener valores seleccionados
+      var estudiante = $("#id_estudiante").val();
+      var estudiante_uno = $("#id_estudiante_uno").val();
+      var estudiante_dos = $("#id_estudiante_dos").val();
+  
+      var jurado_1 = $("#id_jurado_1").val();
+      var jurado_2 = $("#id_jurado_2").val();
+      var jurado_3 = $("#id_jurado_3").val();
+  
+      // Guardar todas las opciones seleccionadas en un array
+      var estudiantesSeleccionados = [estudiante, estudiante_uno, estudiante_dos];
+      var juradosSeleccionados = [jurado_1, jurado_2, jurado_3];
+  
+      // Limpiar y destruir select2 temporalmente para evitar problemas de visualización
+      $("#id_estudiante_uno, #id_estudiante_dos, #id_jurado_1, #id_jurado_2, #id_jurado_3").select2("destroy");
+  
+      // Ocultar las opciones seleccionadas en los select de estudiantes
+      $("#id_estudiante_uno option, #id_estudiante_dos option").each(function() {
+        if (estudiantesSeleccionados.includes($(this).val())) {
+          $(this).prop('disabled', true); // Deshabilitar la opción si ya está seleccionada
+        } else {
+          $(this).prop('disabled', false); // Habilitar si no está seleccionada
+        }
+      });
+  
+      // Ocultar las opciones seleccionadas en los select de jurados
+      $("#id_jurado_1 option, #id_jurado_2 option, #id_jurado_3 option").each(function() {
+        if (juradosSeleccionados.includes($(this).val())) {
+          $(this).prop('disabled', true); // Deshabilitar la opción si ya está seleccionada
+        } else {
+          $(this).prop('disabled', false); // Habilitar si no está seleccionada
+        }
+      });
+  
+      // Volver a inicializar select2 después de modificar las opciones
+      $("#id_estudiante_uno, #id_estudiante_dos, #id_jurado_1, #id_jurado_2, #id_jurado_3").select2();
+    }
+  
+    // Escuchar el evento de cambio en los select
+    $("#id_estudiante, #id_estudiante_uno, #id_estudiante_dos, #id_jurado_1, #id_jurado_2, #id_jurado_3").on('change', function() {
+      actualizarOpciones();
+    });
+  
+    // Llamar la función al inicio para aplicar el estado inicial
+    actualizarOpciones();
+  });
+</script>
+<div class="container no-gutters p-lg-5 p-3 font ">
+  <div class="no-gutte container p-lg-5 p-0">
+    <h1 class="text-center colortitle pb-2 titlesuperior">REGISTRO DE ACTA DEFENSA DE PERFIL DE PORYECTO</h1>
+    {% if form_disabled %}
+      <p class="text-end text colorestados ">El formulario de investigación está deshabilitado para el Usuario.</p>
+    {% endif %}
+    
+    <article class="pb-2 colortext" >
+      <form id="pot" method="post" enctype="multipart/form-data" onsubmit="showConfirmationModal(event)">
+        {% csrf_token %}
+        <div class="fechas fontI">
+            <div class="row mb-3">
+              <div class="col-md-3 pt-1">
+                {{ form.carrera.label_tag }}<br>{{ form.carrera }}
+                {% if form.carrera.errors %}
+                  <div class="text-danger">{{ form.carrera.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-3 pt-1">
+                {{ form.acta.label_tag }}<br>{{ form.acta }}
+                {% if form.acta.errors %}
+                  <div class="text-danger">{{ form.acta.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-3 pt-1">
+                {{ form.perperiodo.label_tag }}<br>
+                <select name="perperiodo" class="form-control">
+                    {% for periodo in ultimos_periodos %}
+                        <option value="{{ periodo.id }}">{{ periodo }}</option>
+                    {% endfor %}
+                </select>
+                {% if form.perperiodo.errors %}
+                    <div class="text-danger">{{ form.perperiodo.errors }}</div>
+                {% endif %}
+              </div>
+            
+              <div class="col-md-3 pt-1">
+                {{ form.tutor.label_tag }}<br>{{ form.tutor }}
+                {% if form.tutor.errors %}
+                  <div class="text-danger">{{ form.tutor.errors }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-4 pt-1">
+                {{ form.estudiante.label_tag }}<br>{{ form.estudiante }}
+                {% if form.estudiante.errors %}
+                  <div class="text-danger">{{ form.estudiante.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-4 pt-1">
+                {{ form.estudiante_uno.label_tag }}<br>{{ form.estudiante_uno }}
+                {% if form.estudiante_uno.errors %}
+                  <div class="text-danger">{{ form.estudiante_uno.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-4 pt-1">
+                {{ form.estudiante_dos.label_tag }}<br>{{ form.estudiante_dos }}
+                {% if form.estudiante_dos.errors %}
+                  <div class="text-danger">{{ form.estudiante_dos.errors }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="col-md-12 pt-1">
+              {{ form.titulo.label_tag }}<br>{{ form.titulo }}
+              {% if form.titulo.errors %}
+                <div class="text-danger">{{ form.titulo.errors }}</div>
+              {% endif %}
+            </div>
+            <div class="row mb-3 pt-2">
+              <div class="col-md-3 pt-1">
+                {{ form.lugar.label_tag }}<br>{{ form.lugar }}
+                {% if form.lugar.errors %}
+                  <div class="text-danger">{{ form.lugar.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-3 pt-1">
+                {{ form.fechadefensa.label_tag }}<br>{{ form.fechadefensa }}
+                {% if form.fechadefensa.errors %}
+                  <div class="text-danger">{{ form.fechadefensa.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-3 pt-1">
+                {{ form.horainicio.label_tag }}<br>{{ form.horainicio }}
+                {% if form.horainicio.errors %}
+                  <div class="text-danger">{{ form.horainicio.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-3 pt-1">
+                {{ form.horafin.label_tag }}<br>{{ form.horafin }}
+                {% if form.horafin.errors %}
+                  <div class="text-danger">{{ form.horafin.errors }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-4 pt-1">
+                {{ form.jurado_1.label_tag }}<br>{{ form.jurado_1 }}
+                {% if form.jurado_1.errors %}
+                  <div class="text-danger">{{ form.jurado_1.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-4 pt-1">
+                {{ form.jurado_2.label_tag }}<br>{{ form.jurado_2 }}
+                {% if form.jurado_2.errors %}
+                  <div class="text-danger">{{ form.jurado_2.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-4 pt-1">
+                {{ form.jurado_3.label_tag }}<br>{{ form.jurado_3 }}
+                {% if form.jurado_3.errors %}
+                  <div class="text-danger">{{ form.jurado_3.errors }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-6 pt-1">
+                {{ form.modalidad.label_tag }}<br>{{ form.modalidad }}
+                {% if form.modalidad.errors %}
+                  <div class="text-danger">{{ form.modalidad.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-6 pt-1">
+                {{ form.resultado.label_tag }}<br>{{ form.resultado }}
+                {% if form.resultado.errors %}
+                  <div class="text-danger">{{ form.resultado.errors }}</div>
+                {% endif %}
+              </div>
+            </div>
+            <div class="row mb-3">
+              <div class="col-md-4 pt-1">
+                {{ form.observacion_1.label_tag }}<br>{{ form.observacion_1 }}
+                {% if form.observacion_1.errors %}
+                  <div class="text-danger">{{ form.observacion_1.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-4 pt-1">
+                {{ form.observacion_2.label_tag }}<br>{{ form.observacion_2 }}
+                {% if form.observacion_2.errors %}
+                  <div class="text-danger">{{ form.observacion_2.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-4 pt-1">
+                {{ form.observacion_3.label_tag }}<br>{{ form.observacion_3 }}
+                {% if form.observacion_3.errors %}
+                  <div class="text-danger">{{ form.observacion_3.errors }}</div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        <br>
+        <input name="" id="" class="btn btn-dark me-2 fontII" type="submit" value="Enviar Información" {% if form_disabled %}disabled{% endif %}>
+        <a class="btn btn-secondary fontII" href="{% url 'dashboard' %}">Cancelar</a>
+
+      </form>
+      {% block scripts %}
+      <script>
+        // Función para mostrar el modal de confirmación
+        function showConfirmationModal(event) {
+          event.preventDefault();
+          $('#confirmationModal').modal('show'); 
+          
+          setTimeout(function() {
+            $('#confirmationModal').modal('hide');
+            document.getElementById("pot").submit(); 
+          }, 2000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+          const estudianteSelects = [
+            document.getElementById('id_estudiante'),
+            document.getElementById('id_estudiante_uno'),
+            document.getElementById('id_estudiante_dos')
+          ];
+          
+          const juradoSelects = [
+            document.getElementById('id_tutor'),
+            document.getElementById('id_jurado_1'),
+            document.getElementById('id_jurado_2'),
+            document.getElementById('id_jurado_3')
+          ];
+        
+          // Actualiza las opciones disponibles para los estudiantes
+          function updateEstudianteOptions() {
+            const selectedValues = estudianteSelects.map(select => select.value);
+            estudianteSelects.forEach(select => {
+              Array.from(select.options).forEach(option => {
+                option.hidden = selectedValues.includes(option.value) && option.value !== select.value;
+              });
+            });
+          }
+        
+          // Actualiza las opciones disponibles para los jurados
+          function updateJuradoOptions() {
+            const selectedValues = juradoSelects.map(select => select.value);
+            juradoSelects.forEach(select => {
+              Array.from(select.options).forEach(option => {
+                option.hidden = selectedValues.includes(option.value) && option.value !== select.value;
+              });
+            });
+          }
+        
+          // Agregar evento change para cada select de estudiantes
+          estudianteSelects.forEach(select => {
+            select.addEventListener('change', updateEstudianteOptions);
+          });
+        
+          // Agregar evento change para cada select de jurados
+          juradoSelects.forEach(select => {
+            select.addEventListener('change', updateJuradoOptions);
+          });
+        
+          // Ejecutar la función al cargar la página para ocultar opciones seleccionadas previamente
+          updateEstudianteOptions();
+          updateJuradoOptions();
+        });
+
+        
+       
+      </script>
+            
+      {% endblock %}
+      
+    </article>
+  </div> 
+</div><br>
+
+
+<!-- Modal de confirmación -->
+<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content bg-mdal">
+      <div class="modal-header">
+        <h5 class="modal-title font" id="confirmationModalLabel"> Confirmacion de Formulario</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center font">
+        <img src="{% static 'img/confi.png' %}" class="img-close" alt="" /><br>
+        ¡Formulario Enviado con Exito!
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+
