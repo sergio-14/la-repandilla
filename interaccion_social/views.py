@@ -3,13 +3,14 @@ from django.contrib.auth.models import Group
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required,permission_required
 from django.shortcuts import render, redirect,get_object_or_404
-from .forms import T_ProyectosForm, IntSocSettingsForm, FaseProyectoForm,TipoProyectoForm
+from .forms import T_ProyectosForm, IntSocSettingsForm, FaseProyectoForm,TipoProyectoForm,PeriodoForm
 from .forms import FaseProyectoForm, GestionForm, SemestreForm,MateriaForm, EditarT_ProyectosForm
 from django.conf import settings
 from django.contrib.auth import views as auth_views
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.core.paginator import Paginator
-from .models import T_Proyectos_IIISP, T_Gestion, T_Semestre, T_Materia, HabilitarFechas, T_Tipo, T_Fase
+from .models import T_Proyectos_IIISP,HabilitarFechas, T_Tipo, T_Fase
+from seg_mod_graduacion.models import Gestion,Periodo,Materia,Semestre
 from django.contrib.auth.models import User
 from datetime import date
 
@@ -66,14 +67,15 @@ def proyecto_detail(request):
     hoy = date.today()
     habilitado = settings and (settings.fecha_inicio_habilitacion <= hoy <= settings.fecha_fin_habilitacion)
     tiempo_restante = settings.tiempo_restante() if settings else "0 tiempo"
-
+    
+    ultimos_periodos = Periodo.objects.all().order_by('-gestion__anio', '-numero')[:2]
     if request.method == 'POST':
         form = T_ProyectosForm(request.POST, request.FILES)
         if habilitado and form.is_valid():
             proyecto = form.save(commit=False)  # No guardar todavía la instancia del modelo
             proyecto.S_persona = User.objects.get(nombre=request.user.nombre)  # Asignar la persona relacionada con el usuario autenticado
             proyecto.save()  # Ahora guardar la instancia del modelo
-            return redirect('dashboard')  # Asegúrate de que 'dashboard' sea el nombre correcto de tu vista para el dashboard
+            return redirect('proyectosin_so')  # Asegúrate de que 'dashboard' sea el nombre correcto de tu vista para el dashboard
     else:
         form = T_ProyectosForm()
 
@@ -81,6 +83,7 @@ def proyecto_detail(request):
         'form': form,
         'habilitado': habilitado,
         'tiempo_restante': tiempo_restante,
+        'ultimos_periodos': ultimos_periodos 
     })
 #editar proyectos 
 @login_required
@@ -92,7 +95,7 @@ def editar_proyecto(request, Id_Proyect):
     settings = HabilitarFechas.objects.first()
     hoy = date.today()
     habilitado = settings and (settings.fecha_inicio_habilitacion <= hoy <= settings.fecha_fin_habilitacion)
-    
+    ultimos_periodos = Periodo.objects.all().order_by('-gestion__anio', '-numero')[:2]
     if request.method == 'POST':
         form = EditarT_ProyectosForm(request.POST, request.FILES, instance=proyecto)
         if habilitado and form.is_valid():
@@ -104,34 +107,48 @@ def editar_proyecto(request, Id_Proyect):
     return render(request, 'homesocial/editar_proyecto.html', {
         'form': form,
         'habilitado': habilitado,
+        'ultimos_periodos': ultimos_periodos ,
+        'proyecto': proyecto, 
     })
 
 #clasificacion de enviados y no enviados
 @user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
 def clasificar_proyectos(request):
-    gestion_id = request.GET.get('gestion')
-    materias = T_Materia.objects.all()
-    gestiones = T_Gestion.objects.all()
+    gestion_input = request.GET.get('gestion')  # El valor ingresado, ejemplo: "1/2025"
+    materias = Materia.objects.all()
 
     materias_con_proyectos = []
     materias_sin_proyectos = []
 
+    if gestion_input:
+        try:
+            numero, anio = gestion_input.split('/')
+            periodos_filtrados = Periodo.objects.filter(numero=numero, gestion__anio=anio)
+        except ValueError:
+            periodos_filtrados = None  # Si el formato es incorrecto, no filtrar
+    else:
+        periodos_filtrados = Periodo.objects.all()
+
     for materia in materias:
-        if gestion_id:
-            proyectos = T_Proyectos_IIISP.objects.filter(T_Materia=materia, T_Gestion_id=gestion_id)
+        if gestion_input and periodos_filtrados:
+            proyectos = T_Proyectos_IIISP.objects.filter(T_Materia=materia, T_Gestion__in=periodos_filtrados)
         else:
             proyectos = T_Proyectos_IIISP.objects.filter(T_Materia=materia)
 
         if proyectos.exists():
-            materias_con_proyectos.append(materia)
+            for proyecto in proyectos:
+                materias_con_proyectos.append({
+                    'materia': materia,
+                    'persona': proyecto.S_persona,
+                    
+                })
         else:
             materias_sin_proyectos.append(materia)
-    
+
     return render(request, 'homesocial/clasificar_proyectos.html', {
         'materias_con_proyectos': materias_con_proyectos,
         'materias_sin_proyectos': materias_sin_proyectos,
-        'gestiones': gestiones,
-        'selected_gestion': gestion_id
+        'selected_gestion': gestion_input
     })
     
 #asignacion de fechas para subir trabajos
@@ -170,46 +187,46 @@ def proyectosin_so(request):
 
 #poryectos interacion social vista general publica
 def repoin(request):
-    t_gestion_id = request.GET.get('T_Gestion')
-    t_semestre_id = request.GET.get('T_Semestre')
-    
-    # Inicializar listaproyectos como vacío
-    listaproyectos = T_Proyectos_IIISP.objects.none()
-    
-    if t_gestion_id or t_semestre_id:
+    gestion_id = request.GET.get('T_Gestion')  # Asegúrate de que esto coincide con el nombre del select
+    semestre_id = request.GET.get('Semestre')
+
+    listaproyectos = T_Proyectos_IIISP.objects.none()  # Inicializo con una consulta vacía
+
+    if gestion_id or semestre_id:
         listaproyectos = T_Proyectos_IIISP.objects.all()
-        
-        if t_gestion_id:
-            listaproyectos = listaproyectos.filter(T_Gestion_id=t_gestion_id)
-        
-        if t_semestre_id:
-            listaproyectos = listaproyectos.filter(T_Materia__T_Semestre_id=t_semestre_id)
-        
-        listaproyectos = listaproyectos.order_by('Id_Proyect')  # Ordenar para garantizar el primer proyecto
-    
-    # Obtener el primer proyecto si existe, de lo contrario None
+
+        if gestion_id:
+            listaproyectos = listaproyectos.filter(T_Gestion_id=gestion_id)  # Filtramos por T_Gestion_id
+
+        if semestre_id:
+            listaproyectos = listaproyectos.filter(T_Materia__Semestre_id=semestre_id)
+
+        listaproyectos = listaproyectos.order_by('Id_Proyect')  # Ordenar por Id_Proyect
+
+    # Obtener el primer proyecto si existe
     primer_proyecto = listaproyectos.first() if listaproyectos.exists() else None
-    
+
     context = {
         'primer_proyecto': primer_proyecto,
-        't_gestiones': T_Gestion.objects.all(),
-        't_semestres': T_Semestre.objects.all(),
+        't_gestiones': Periodo.objects.all(),
+        't_semestres': Semestre.objects.all(),
         'listaproyectos': listaproyectos,
-        'selected_t_gestion': t_gestion_id,
-        'selected_t_semestre': t_semestre_id,
+        'selected_t_gestion': gestion_id,
+        'selected_t_semestre': semestre_id,
     }
     
     return render(request, 'homesocial/repoin.html', context)
 
+
 ######## TAREAS #########
 
 #Tipo croud
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def listart(request):
     tipos = T_Tipo.objects.all()
     return render(request, 'Tareas/Tipo/listart.html', {'tipos': tipos})
 
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def creart(request):
     if request.method == "POST":
         form = TipoProyectoForm(request.POST)
@@ -220,7 +237,7 @@ def creart(request):
         form = TipoProyectoForm()
     return render(request, 'Tareas/Tipo/creart.html', {'form': form})
 
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def editart(request, pk):
     tipo = get_object_or_404(T_Tipo, pk=pk)
     if request.method == "POST":
@@ -232,7 +249,7 @@ def editart(request, pk):
         form = TipoProyectoForm(instance=tipo)
     return render(request, 'Tareas/Tipo/editart.html', {'form': form})
 
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def eliminart(request, pk):
     tipo = get_object_or_404(T_Tipo, pk=pk)
     if request.method == "POST":
@@ -241,12 +258,12 @@ def eliminart(request, pk):
     return render(request, 'Tareas/Tipo/eliminart.html', {'object': tipo})
 
 #Fase croud
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def listarf(request):
     fase = T_Fase.objects.all()
     return render(request, 'Tareas/FaseEtapa/listarf.html', {'fase': fase})
 
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def crearf(request):
     if request.method == "POST":
         formf = FaseProyectoForm(request.POST)
@@ -256,7 +273,7 @@ def crearf(request):
     else:
         formf = FaseProyectoForm()
     return render(request, 'Tareas/FaseEtapa/crearf.html', {'formf': formf})
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def editarf(request, pk):
     fase = get_object_or_404(T_Fase, pk=pk)
     if request.method == "POST":
@@ -268,7 +285,7 @@ def editarf(request, pk):
         formf = FaseProyectoForm(instance=fase)
     return render(request, 'Tareas/FaseEtapa/editarf.html', {'formf': formf})
 
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def eliminarf(request, pk):
     fase = get_object_or_404(T_Fase, pk=pk)
     if request.method == "POST":
@@ -277,15 +294,15 @@ def eliminarf(request, pk):
     return render(request, 'Tareas/FaseEtapa/eliminarf.html', {'object': fase})
 
 #Gestion croud
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def listarg(request):
-    gestion_list = T_Gestion.objects.all().order_by('-Id_Ges')
+    gestion_list = Gestion.objects.all().order_by('-id')
     paginator = Paginator(gestion_list, 5) 
     page_number = request.GET.get('page')
     gestion = paginator.get_page(page_number)
     return render(request, 'Tareas/Gestion/listarg.html', {'gestion': gestion})
 
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def crearg(request):
     if request.method == "POST":
         formg = GestionForm(request.POST)
@@ -295,9 +312,9 @@ def crearg(request):
     else:
         formg = GestionForm()
     return render(request, 'Tareas/Gestion/crearg.html', {'formg': formg})
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def editarg(request, pk):
-    gestion = get_object_or_404(T_Gestion, pk=pk)
+    gestion = get_object_or_404(Gestion, pk=pk)
     if request.method == "POST":
         formg = GestionForm(request.POST, instance=gestion)
         if formg.is_valid():
@@ -306,20 +323,53 @@ def editarg(request, pk):
     else:
         formg = GestionForm(instance=gestion)
     return render(request, 'Tareas/Gestion/editarg.html', {'formg': formg})
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def eliminarg(request, pk):
-    gestion = get_object_or_404(T_Gestion, pk=pk)
+    gestion = get_object_or_404(Gestion, pk=pk)
     if request.method == "POST":
         gestion.delete()
         return redirect('listarg')
     return render(request, 'Tareas/Gestion/eliminarg.html', {'object': gestion})
 
+#Periodo croud
+
+def listarper(request):
+    periodo_list = Periodo.objects.all().order_by('-id')
+    paginator = Paginator(periodo_list, 5) 
+    page_number = request.GET.get('page')
+    periodo = paginator.get_page(page_number)
+    return render(request, 'Tareas/Periodo/listarper.html', {'periodo': periodo})
+
+
+def crearper(request):
+    if request.method == "POST":
+        formper = PeriodoForm(request.POST)
+        if formper.is_valid():
+            formper.save()
+            return redirect('listarper')
+    else:
+        formper = PeriodoForm()
+    return render(request, 'Tareas/Periodo/crearper.html', {'formper': formper})
+
+def editarper(request, pk):
+    periodo = get_object_or_404(Periodo, pk=pk)
+    if request.method == "POST":
+        formper = PeriodoForm(request.POST, instance=periodo)
+        if formper.is_valid():
+            formper.save()
+            return redirect('listarpér')
+    else:
+        formper = PeriodoForm(instance=periodo)
+    return render(request, 'Tareas/Periodo/editarper.html', {'formper': formper})
+
+
+
 #Semestre croud
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def listars(request):
-    semestre = T_Semestre.objects.all()
+    semestre = Semestre.objects.all()
     return render(request, 'Tareas/Semestre/listars.html', {'semestre': semestre})
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def crears(request):
     if request.method == "POST":
         forms = SemestreForm(request.POST)
@@ -329,9 +379,9 @@ def crears(request):
     else:
         forms = SemestreForm()
     return render(request, 'Tareas/Semestre/crears.html', {'forms': forms})
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def editars(request, pk):
-    semestre = get_object_or_404(T_Semestre, pk=pk)
+    semestre = get_object_or_404(Semestre, pk=pk)
     if request.method == "POST":
         forms = SemestreForm(request.POST, instance=semestre)
         if forms.is_valid():
@@ -340,20 +390,20 @@ def editars(request, pk):
     else:
         forms = SemestreForm(instance=semestre)
     return render(request, 'Tareas/Semestre/editars.html', {'forms': forms})
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def eliminars(request, pk):
-    semestre = get_object_or_404(T_Semestre, pk=pk)
+    semestre = get_object_or_404(Semestre, pk=pk)
     if request.method == "POST":
         semestre.delete()
         return redirect('listars')
     return render(request, 'Tareas/Semestre/eliminars.html', {'object': semestre})
 
 #Materia cruod
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def listarm(request):
-    materia = T_Materia.objects.all()
+    materia = Materia.objects.all()
     return render(request, 'Tareas/Materia/listarm.html', {'materia': materia})
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def crearm(request):
     if request.method == 'POST':
         formm = MateriaForm(request.POST)
@@ -363,9 +413,9 @@ def crearm(request):
     else:
         formm = MateriaForm()
     return render(request, 'Tareas/Materia/crearm.html', {'formm': formm})
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def editarm(request, pk):
-    materia = get_object_or_404(T_Materia, pk=pk)
+    materia = get_object_or_404(Materia, pk=pk)
     if request.method == 'POST':
         formm = MateriaForm(request.POST, instance=materia)
         if formm.is_valid():
@@ -374,9 +424,9 @@ def editarm(request, pk):
     else:
         formm = MateriaForm(instance=materia)
     return render(request, 'Tareas/Materia/editarm.html', {'formm': formm})
-@user_passes_test(lambda u: permiso_I_S(u, 'ADMIIISP')) 
+
 def eliminarm(request, pk):
-    materia = get_object_or_404(T_Materia, pk=pk)
+    materia = get_object_or_404(Materia, pk=pk)
     if request.method == 'POST':
         materia.delete()
         return redirect('listarm')

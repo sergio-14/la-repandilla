@@ -66,6 +66,9 @@ class Carrera(models.Model):
 class Semestre(models.Model):
     S_Semestre=models.CharField(max_length=100,verbose_name='Semestre')
     carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.S_Semestre
 
 # Modelo de Materia
 class Materia(models.Model):
@@ -73,6 +76,9 @@ class Materia(models.Model):
     codigo = models.CharField(max_length=50, unique=True)
     semestre = models.ForeignKey(Semestre, on_delete=models.CASCADE)
     carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return self.nombre_materia
 
 # Modelo de Gestión
 class Gestion(models.Model):

@@ -6,8 +6,8 @@
 <div class="container p-lg-5 no-gutters p-0">
     <div class=" fontII">
         <article class="p-lg-5 no-gutte px-3">
-            <h1 id=" letr" class="text-center pb-2 titlesuperior">Agregar Nuevo Proyecto de Investigación e Interacción Social</h1>
-            <p class="text-tareas text-end p-1">
+            <h1 id=" letr" class="text-center colortitle pb-2 titlesuperior">Formulario de Investigación Extension e Interacción Social</h1>
+            <p class="colortext fontI text-end p-1">
                 <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-calendar3" viewBox="0 0 16 16">
                     <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2M1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857z"/>
                     <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 0 1 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2m-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2m3 0a1 1 0 0 0 0-2 1 1 0 1 0 0 2m3 0a1 1 0 1 0 0-2 1 1 0 1 0 0 2"/>
@@ -37,14 +37,21 @@
                   </div>
                   <div class="col-md-6"> 
                     {{ form.S_Imagen|as_crispy_field }}
-                    {{ form.T_Gestion|as_crispy_field }}
+                    <p>Periodo y Gestión</p>
+                    <select name="T_Gestion" class="form-control" required>
+                        <option value="" selected="">---------</option>
+                        {% for periodo in ultimos_periodos %}
+                            <option value="{{ periodo.id }}">{{ periodo }}</option>
+                        {% endfor %}
+                    </select><br>
+                    {% comment %} {{ form.T_Gestion|as_crispy_field }} {% endcomment %}
                     {{ form.T_Materia|as_crispy_field }}
                   </div>
                 </div>
                 {% if habilitado %}
                 <br>
-                <input name="" id="" class="btn btn-dark" type="submit" value="Enviar Información"> 
-                <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancelar</a><br>
+                <input name="" id="" class="btn btn-primary" type="submit" value="Enviar Información"> 
+                <a href="{% url 'dashboard' %}" class="btn btn-danger">Cancelar</a><br>
                 {% else %}
                 <p>El sistema está deshabilitado para agregar proyectos en este momento.</p>
                 {% endif %}

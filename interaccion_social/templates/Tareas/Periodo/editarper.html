@@ -11,11 +11,11 @@
             {% csrf_token %}
             <div class="row fontI">
               <div class="col-lg-4 col-12">
-                {{ formg|crispy }}
+                {{ formper|crispy }}
               </div>
             </div>
             <input name="" id="" class="btn btn-primary fontII" type="submit" value="Enviar Información"> || 
-            <a name="" id="" class="btn btn-danger fontII" href="{% url 'listarg' %}" role="button">Cancelar</a>
+            <a name="" id="" class="btn btn-danger fontII" href="{% url 'listarper' %}" role="button">Cancelar</a>
         </form>
       <br>
     </article>

@@ -6,7 +6,7 @@
 <div class="container p-lg-5 no-gutters p-0">
     <div class=" fontII">
         <article class="p-lg-5 no-gutte px-3">
-            <h1 id=" letr" class="text-center pb-2 titlesuperior">Agregar Nuevo Proyecto de Interacción Social</h1>
+            <h3 id=" letr" class="text-center colortitle pb-2 fontI "> Editar Formulario de Investigación Extension e Interacción Social</h3>
             <form id="proyectoForm" method="post" enctype="multipart/form-data" onsubmit="showConfirmationModal(event)">
                 {% csrf_token %}
                 <div class="row fontI colortext">
@@ -27,14 +27,21 @@
                   </div>
                   <div class="col-md-6"> 
                     {{ form.S_Imagen|as_crispy_field }}
-                    {{ form.T_Gestion|as_crispy_field }}
+                    <p>Periodo y Gestión</p>
+                    <select name="T_Gestion" class="form-control" required>
+                        <option value="" selected="">---------</option>
+                        {% for periodo in ultimos_periodos %}
+                            <option value="{{ periodo.id }}" {% if proyecto.T_Gestion_id == periodo.id %}selected{% endif %}>{{ periodo }}</option>
+                        {% endfor %}
+                    </select><br>
+                    {% comment %} {{ form.T_Gestion|as_crispy_field }} {% endcomment %}
                     {{ form.T_Materia|as_crispy_field }}
                   </div>
                 </div>
                 {% if habilitado %}
                 <br>
-                <input name="" id="" class="btn btn-dark" type="submit" value="Enviar Información"> 
-                <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancelar</a><br>
+                <input name="" id="" class="btn btn-primary" type="submit" value="Enviar Información"> 
+                <a href="{% url 'dashboard' %}" class="btn btn-danger">Cancelar</a><br>
                 {% else %}
                 <p>El sistema está deshabilitado para agregar proyectos en este momento.</p>
                 {% endif %}

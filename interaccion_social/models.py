@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from datetime import date, datetime, timedelta
 from django.conf import settings
+from seg_mod_graduacion.models import  Gestion , Periodo, Materia, Semestre
 
 User = get_user_model()
 
@@ -76,9 +77,9 @@ class T_Proyectos_IIISP(models.Model):
     S_Documentacion = models.FileField(upload_to='Documento/', verbose_name='Documentación', null=True)
     S_Imagen = models.ImageField(upload_to='imagenes/', verbose_name='Imagen', null=True)
     T_Fase_proyecto = models.ForeignKey(T_Fase, on_delete=models.CASCADE, verbose_name='Fase del Proyecto')
-    T_Gestion = models.ForeignKey(T_Gestion, on_delete=models.CASCADE, verbose_name='Gestion')
+    T_Gestion = models.ForeignKey(Periodo, on_delete=models.CASCADE, verbose_name='Gestion')
     T_Tipo_Proyecto = models.ForeignKey(T_Tipo, on_delete=models.CASCADE, verbose_name='Tipo de Proyecto')
-    T_Materia = models.ForeignKey(T_Materia, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Materia')
+    T_Materia = models.ForeignKey(Materia, on_delete=models.CASCADE, null=True, blank=True, verbose_name='Materia')
      
     class Meta:
         verbose_name_plural = "Proyectos IIISP"

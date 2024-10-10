@@ -1,5 +1,6 @@
 from django import forms
-from .models import T_Proyectos_IIISP, HabilitarFechas, T_Tipo, T_Fase, T_Gestion, T_Semestre, T_Materia
+from .models import T_Proyectos_IIISP, HabilitarFechas, T_Tipo, T_Fase
+from seg_mod_graduacion.models import Gestion,Periodo,Materia,Semestre
 from datetime import date
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Row, Column
@@ -21,12 +22,6 @@ class T_ProyectosForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(T_ProyectosForm, self).__init__(*args, **kwargs)
-        all_gestion = T_Gestion.objects.all()
-        self.fields['T_Gestion'].queryset = all_gestion  
-        
-        recent_gestion = all_gestion.order_by('-Id_Ges')[:4]
-        self.fields['T_Gestion'].widget.choices = [(gestion.pk, gestion) for gestion in recent_gestion]
-
         
         self.helper = FormHelper()
         self.helper.layout = Layout(
@@ -142,15 +137,48 @@ class FaseProyectoForm(forms.ModelForm):
 #gestion
 class GestionForm(forms.ModelForm):
     class Meta:
-        model = T_Gestion
-        fields = ['S_Gestion']
+        model = Gestion
+        fields = ['anio']
+        labels = {
+            'anio': 'Agregar Año',
+            }
+    def clean_anio(self):
+        anio = self.cleaned_data.get('anio')
+        if anio < 0:
+            raise forms.ValidationError("El año no puede ser negativo.")
+        return anio
+  
+import datetime
+  
+class PeriodoForm(forms.ModelForm):
+    class Meta:
+        model = Periodo
+        fields = ['numero','gestion']
+        labels = {
+            'numero': 'periodo',
+            'gestion': 'gestion',
+            }   
+    def clean_numero(self):
+        numero = self.cleaned_data.get('numero')
+        if numero not in [1, 2]:
+            raise forms.ValidationError("Solo se permiten los valores 1 y 2.")
+        return numero
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Limitar el queryset de gestion a los últimos 6 años
+        current_year = datetime.datetime.today().year
+        last_six_years = list(range(current_year, current_year - 6, -1))  # Ajuste a los últimos 6 años
+        self.fields['gestion'].queryset = Gestion.objects.filter(anio__in=last_six_years)
+        
 #semestre
 class SemestreForm(forms.ModelForm):
     class Meta:
-        model = T_Semestre
-        fields = ['S_Semestre']
+        model = Semestre
+        fields = ['S_Semestre','carrera']
 #materia
 class MateriaForm(forms.ModelForm):
     class Meta:
-        model = T_Materia
-        fields = ['S_Materia', 'T_Semestre']
+        model = Materia
+        fields = ['nombre_materia','codigo','semestre','carrera']

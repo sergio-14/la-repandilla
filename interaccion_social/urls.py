@@ -30,6 +30,10 @@ urlpatterns = [
     path('Tareas/Gestion/listarg/editarg/<int:pk>/', views.editarg, name='editarg'),
     path('Tareas/Gestion/listarg/eliminarg/<int:pk>/', views.eliminarg, name='eliminarg'),
     
+    path('Tareas/Periodo/listarper/', views.listarper, name='listarper'),
+    path('Tareas/Periodo/listarper/crearper/', views.crearper, name='crearper'),
+    path('Tareas/Periodo/listarper/editarper/<int:pk>/', views.editarper, name='editarper'),
+    
     path('Tareas/Semestre/listars/', views.listars, name='listars'),
     path('Tareas/Semestre/listars/crears/', views.crears, name='crears'),
     path('Tareas/Semestre/listars/editars/<int:pk>/', views.editars, name='editars'),
