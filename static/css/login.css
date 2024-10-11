@@ -55,14 +55,20 @@ body {
   box-shadow: inset 19px 19px 23px #dddddd,
             inset -19px -19px 23px #ffffff;
 }
+.subtitulo{
+  font-size: 54px;
+  font-family: "Anton";
+  
+  color: #120750;
+}
 
 .img-bottom-left {
   position: absolute;
   z-index: 10;
   bottom: 0;
   left: 0;
-  width: 890px;
-  height: auto;
+  width: 820px;
+  height: 85%;
 
   border-top-right-radius: 20px; /* Ajusta el valor según tus necesidades */
   border-bottom-right-radius: 20px;
