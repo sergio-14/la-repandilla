@@ -364,17 +364,17 @@ class ActaPublicaForm(forms.ModelForm):
        
         usuarios_con_actapublica = ActaPublica.objects.filter(resultado='Aprobado').values_list('estudiante', flat=True)
         
-        usuarios_uno_con_repositorio = RepositorioTitulados.objects.values_list('estudiante_uno', flat=True) 
+        #usuarios_uno_con_repositorio = RepositorioTitulados.objects.values_list('estudiante_uno', flat=True) 
         usuarios_uno_con_resultado_Suficiente = ActaPrivada.objects.filter(resultado='Suficiente').values_list('estudiante_uno', flat=True).distinct() 
         usuarios_uno_con_proyecto_final = ProyectoFinal.objects.filter(estado='Aprobado').values_list('estudiante_uno', flat=True).distinct()
        
-        usuarios_uno_con_actapublica = ActaPublica.objects.filter(resultado='Aprobado').values_list('estudiante_uno', flat=True)
+        #usuarios_uno_con_actapublica = ActaPublica.objects.filter(resultado='Aprobado').values_list('estudiante_uno', flat=True)
         
-        usuarios_dos_con_repositorio = RepositorioTitulados.objects.values_list('estudiante_dos', flat=True) 
+       # usuarios_dos_con_repositorio = RepositorioTitulados.objects.values_list('estudiante_dos', flat=True) 
         usuarios_dos_con_resultado_Suficiente = ActaPrivada.objects.filter(resultado='Suficiente').values_list('estudiante_dos', flat=True).distinct() 
         usuarios_dos_con_proyecto_final = ProyectoFinal.objects.filter(estado='Aprobado').values_list('estudiante_dos', flat=True).distinct()
         
-        usuarios_dos_con_actapublica = ActaPublica.objects.filter(resultado='Aprobado').values_list('estudiante_dos', flat=True)
+        #usuarios_dos_con_actapublica = ActaPublica.objects.filter(resultado='Aprobado').values_list('estudiante_dos', flat=True)
         self.fields['estudiante'].queryset = User.objects.filter(
             groups=estudiantes_group
         ).exclude(
@@ -391,30 +391,22 @@ class ActaPublicaForm(forms.ModelForm):
         
         self.fields['estudiante_uno'].queryset = User.objects.filter(
             groups=estudiantes_group
-        ).exclude(
-            id__in=usuarios_uno_con_repositorio
         ).filter(
             id__in=estudiantes_users
         ).filter(
             id__in=usuarios_uno_con_resultado_Suficiente
         ).filter(
             id__in=usuarios_uno_con_proyecto_final
-        ).exclude(
-            id__in=usuarios_uno_con_actapublica
         )
         
         self.fields['estudiante_dos'].queryset = User.objects.filter(
             groups=estudiantes_group
-        ).exclude(
-            id__in=usuarios_dos_con_repositorio
         ).filter(
             id__in=estudiantes_users
         ).filter(
             id__in=usuarios_dos_con_resultado_Suficiente
         ).filter(
             id__in=usuarios_dos_con_proyecto_final
-        ).exclude(
-            id__in=usuarios_dos_con_actapublica
         )
         
         INCLUDED_RESULT = ['Aprobado', 'Reprobado','Postergado']
@@ -505,13 +497,13 @@ class ActaPrivadaForm(forms.ModelForm):
         usuarios_con_proyecto_final = ProyectoFinal.objects.filter(estado='Aprobado').values_list('estudiante', flat=True).distinct()
         usuarios_con_resultado_Suficienteperfil = ActaProyectoPerfil.objects.filter(resultado='Suficiente').values_list('estudiante', flat=True).distinct() 
         
-        usuarios_uno_con_repositorio = RepositorioTitulados.objects.values_list('estudiante_uno', flat=True) 
-        usuarios_uno_con_resultado_Suficiente = ActaPrivada.objects.filter(resultado='Suficiente').values_list('estudiante_uno', flat=True).distinct() 
-        usuarios_uno_con_proyecto_final = ProyectoFinal.objects.filter(estado='Aprobado').values_list('estudiante_uno', flat=True).distinct()
-        usuarios_uno_con_resultado_Suficienteperfil = ActaProyectoPerfil.objects.filter(resultado='Suficiente').values_list('estudiante_uno', flat=True).distinct() 
+        #usuarios_uno_con_repositorio = RepositorioTitulados.objects.values_list('estudiante_uno') 
+        #usuarios_uno_con_resultado_Suficiente = ActaPrivada.objects.filter(resultado='Suficiente').values_list('estudiante_uno').distinct() 
+        usuarios_uno_con_proyecto_final = ProyectoFinal.objects.filter(estado='Aprobado').values_list('estudiante_uno').distinct()
+        usuarios_uno_con_resultado_Suficienteperfil = ActaProyectoPerfil.objects.filter(resultado='Suficiente').values_list('estudiante_uno').distinct() 
         
-        usuarios_dos_con_repositorio = RepositorioTitulados.objects.values_list('estudiante_dos', flat=True) 
-        usuarios_dos_con_resultado_Suficiente = ActaPrivada.objects.filter(resultado='Suficiente').values_list('estudiante_dos', flat=True).distinct() 
+        #usuarios_dos_con_repositorio = RepositorioTitulados.objects.values_list('estudiante_dos', flat=True) 
+        #usuarios_dos_con_resultado_Suficiente = ActaPrivada.objects.filter(resultado='Suficiente').values_list('estudiante_dos', flat=True).distinct() 
         usuarios_dos_con_proyecto_final = ProyectoFinal.objects.filter(estado='Aprobado').values_list('estudiante_dos', flat=True).distinct()
         usuarios_dos_con_resultado_Suficienteperfil = ActaProyectoPerfil.objects.filter(resultado='Suficiente').values_list('estudiante_dos', flat=True).distinct() 
         
@@ -530,25 +522,18 @@ class ActaPrivadaForm(forms.ModelForm):
         )
         self.fields['estudiante_uno'].queryset = User.objects.filter(
             groups=estudiantes_group
-        ).exclude(
-            id__in=usuarios_uno_con_repositorio
         ).filter(
             id__in=estudiantes_users
-        ).exclude(
-            id__in=usuarios_uno_con_resultado_Suficiente
         ).filter(
             id__in=usuarios_uno_con_resultado_Suficienteperfil
         ).filter(
             id__in=usuarios_uno_con_proyecto_final
         )
+        
         self.fields['estudiante_dos'].queryset = User.objects.filter(
             groups=estudiantes_group
-        ).exclude(
-            id__in=usuarios_dos_con_repositorio
         ).filter(
             id__in=estudiantes_users
-        ).exclude(
-            id__in=usuarios_dos_con_resultado_Suficiente
         ).filter(
             id__in=usuarios_dos_con_resultado_Suficienteperfil
         ).filter(
@@ -581,7 +566,7 @@ class ActividadControlForm(forms.ModelForm):
         model = HabilitarProyectoFinal
         fields = ['estudiante','estudiante_uno','estudiante_dos', 'tutor', 'jurado_1', 'jurado_2', 'jurado_3', 'modalidad']
         labels = {
-            'estudiante': 'Postulante',
+            'estudiante': 'Seleccionar Postulante',
             'estudiante_uno': 'Postulante dos',
             'estudiante_dos': 'Postulante tres',
             'tutor': 'Seleccione al Tutor Designado',

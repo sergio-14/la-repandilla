@@ -55,13 +55,18 @@ class CustomUserCreationForm(UserCreationForm):
     )
     class Meta:
         model = User
-        fields = ('email', 'nombre', 'apellido', 'Ru',  'is_active', 'is_staff','is_superuser', 'password1', 'password2', 'groups')
+        fields = ('email', 'nombre', 'apellido', 'apellidoM', 'is_active', 'is_staff','is_superuser', 'password1', 'password2', 'groups')
         widgets = {
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input danger-switch', 'role': 'switch', 'id': 'flexSwitchCheckActive'}),
             'is_staff': forms.CheckboxInput(attrs={'class': 'form-check-input danger-switch', 'role': 'switch', 'id': 'flexSwitchCheckStaff'}),
             'is_superuser': forms.CheckboxInput(attrs={'class': 'form-check-input danger-switch', 'role': 'switch', 'id': 'flexSwitchCheckSuperuser'}),
-}
-       
+            }
+        labels = {
+            'apellido': 'Apellido Paterno',
+            'apellidoM': 'Apellido Materno',
+        }
+        
+        
     def clean_password1(self):
         password1 = self.cleaned_data.get("password1")
 
@@ -115,16 +120,25 @@ class CustomUserCreationForm(UserCreationForm):
         return Group.objects.exclude(id__in=self.instance.groups.values_list('id', flat=True))
 
 # Formulario para actualizar usuario
+class CustomClearableFileInput(forms.ClearableFileInput):
+    # Define aquí tu widget personalizado si es necesario
+    pass
 class CustomUserChangeForm(forms.ModelForm):
     
     class Meta:
         model = User
-        fields = ('email', 'nombre', 'apellido', 'imagen', 'Ru', 'fecha_nac', 'telefono', 'is_active', 'is_staff','is_superuser', 'groups')
+        fields = ('email', 'nombre', 'apellido', 'apellidoM', 'imagen', 'fecha_nac', 'telefono', 'is_active', 'is_staff','is_superuser', 'groups')
         widgets = {
+            'imagen': CustomClearableFileInput(),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input', 'role': 'switch', 'id': 'flexSwitchCheckActive'}),
             'is_staff': forms.CheckboxInput(attrs={'class': 'form-check-input', 'role': 'switch', 'id': 'flexSwitchCheckStaff'}),
             'is_superuser': forms.CheckboxInput(attrs={'class': 'form-check-input', 'role': 'switch', 'id': 'flexSwitchCheckSuperuser'}),
         }
+        labels = {
+            'apellido': 'Apellido Paterno',
+            'apellidoM': 'Apellido Materno',
+        }
+        
     def save(self, commit=True):
         user = super().save(commit=False)
 
@@ -168,17 +182,19 @@ class CustomUserChangeForm(forms.ModelForm):
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['imagen', 'nombre', 'apellido', 'fecha_nac', 'telefono','Ru']
+        fields = ['imagen', 'nombre', 'apellido', 'apellidoM', 'fecha_nac', 'telefono']
         widgets = {
+            'imagen': CustomClearableFileInput(),
             'fecha_nac': forms.DateInput(attrs={'type': 'date'}),
         }
         labels = {
             'imagen': 'Imagen Del Usuario:',
             'nombre': 'Nombres del usuario',
-            'apellido': 'Apellidos del Usuario',
+            'apellido': 'Apellido Paterno',
+            'apellidoM': 'Apellido Materno',
             'fecha_nac': 'Fecha de Nacimiento',
             'telefono': 'N° Telefono/Celular',
-            'Ru': 'RU: "Si es estudiate"',
+           
         }
         
 
@@ -187,10 +203,10 @@ class UserUpdateForm(forms.ModelForm):
 class EstudianteUpdateForm(forms.ModelForm):
     class Meta:
         model = Estudiante
-        fields = ['dni', 'carrera']
+        fields = ['dni', 'Ru']
         labels = {
             'dni': 'Carnet de Identidad',
-            'carrera': 'Carrera',
+            'Ru': 'R.U.'
         }
 
 

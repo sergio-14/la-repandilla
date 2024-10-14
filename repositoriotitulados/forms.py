@@ -63,7 +63,7 @@ class ActividadFilterForm(forms.Form):
         label='Periodo y Géstion',
         widget=forms.TextInput(attrs={'placeholder': 'ejm: "1/año" o "2/año"  ','class': 'form-control'}),
         )
-
+from django.db.models import Q
 class AgregarForm(forms.ModelForm):
     nota_aprobacion = forms.IntegerField(  
         label='Nota',
@@ -116,7 +116,13 @@ class AgregarForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        estudiantes = User.objects.filter(groups__name='Estudiantes').exclude(repo_estudiante__isnull=False)
+        repositorio_excluidos = RepositorioTitulados.objects.values_list('estudiante', 'estudiante_uno', 'estudiante_dos')
+        estudiantes_excluidos = User.objects.filter(Q(id__in=[repo[0] for repo in repositorio_excluidos]) |
+                                                    Q(id__in=[repo[1] for repo in repositorio_excluidos]) |
+                                                    Q(id__in=[repo[2] for repo in repositorio_excluidos]))
+
+        estudiantes = User.objects.filter(groups__name='Estudiantes').exclude(id__in=estudiantes_excluidos)
+
         self.fields['estudiante'].queryset = estudiantes
 
         docentes = User.objects.filter(groups__name='Docentes')

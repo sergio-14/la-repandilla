@@ -199,7 +199,7 @@ def repoin(request):
             listaproyectos = listaproyectos.filter(T_Gestion_id=gestion_id)  # Filtramos por T_Gestion_id
 
         if semestre_id:
-            listaproyectos = listaproyectos.filter(T_Materia__Semestre_id=semestre_id)
+            listaproyectos = listaproyectos.filter(T_Materia__semestre_id=semestre_id)
 
         listaproyectos = listaproyectos.order_by('Id_Proyect')  # Ordenar por Id_Proyect
 

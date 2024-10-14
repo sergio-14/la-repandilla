@@ -294,13 +294,13 @@ def exportar_excel_repositorios(request):
 
     # Anotar los nombres completos y obtener los datos filtrados
     datos = actividades_repositorio.annotate(
-        estudiante_completo=Concat('estudiante__nombre', Value(' '), 'estudiante__apellido'),
-        estudiante_uno_completo=Concat('estudiante_uno__nombre', Value(' '), 'estudiante_uno__apellido'),
-        estudiante_dos_completo=Concat('estudiante_dos__nombre', Value(' '), 'estudiante_dos__apellido'),
-        tutor_completo=Concat('tutor__nombre', Value(' '), 'tutor__apellido'),
-        jurado1_completo=Concat('jurado_1__nombre', Value(' '), 'jurado_1__apellido'),
-        jurado2_completo=Concat('jurado_2__nombre', Value(' '), 'jurado_2__apellido'),
-        jurado3_completo=Concat('jurado_3__nombre', Value(' '), 'jurado_3__apellido'),
+        estudiante_completo=Concat('estudiante__nombre', Value(' '), 'estudiante__apellido', Value(' '), 'estudiante__apellidoM'),
+        estudiante_uno_completo=Concat('estudiante_uno__nombre', Value(' '), 'estudiante_uno__apellido', Value(' '), 'estudiante_uno__apellidoM'),
+        estudiante_dos_completo=Concat('estudiante_dos__nombre', Value(' '), 'estudiante_dos__apellido', Value(' '), 'estudiante_dos__apellidoM'),
+        tutor_completo=Concat('tutor__nombre', Value(' '), 'tutor__apellido', Value(' '), 'tutor__apellidoM'),
+        jurado1_completo=Concat('jurado_1__nombre', Value(' '), 'jurado_1__apellido', Value(' '),  'jurado_1__apellidoM'),
+        jurado2_completo=Concat('jurado_2__nombre', Value(' '), 'jurado_2__apellido', Value(' '),  'jurado_2__apellidoM'),
+        jurado3_completo=Concat('jurado_3__nombre', Value(' '), 'jurado_3__apellido', Value(' '), 'jurado_3__apellidoM'),
     ).values_list(
         'id', 
         'estudiante_completo',  

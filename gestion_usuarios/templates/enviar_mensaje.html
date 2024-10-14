@@ -20,7 +20,7 @@
                 <label for="destinatario" class="form-label">Destinatario:</label>
                 <select class="fontf form-select" id="destinatario" name="destinatario">
                     {% for usuario in usuarios %}
-                        <option value="{{ usuario.id }}" data-firstname="{{ usuario.nombre }}" data-lastname="{{ usuario.apellido }}">{{ usuario.email }}</option>
+                        <option value="{{ usuario.id }}" data-firstname="{{ usuario.nombre }}" data-lastname="{{ usuario.apellido }} {{ usuario.apellidoM}}">{{ usuario.email }}</option>
                     {% endfor %}
                 </select>
             </div>

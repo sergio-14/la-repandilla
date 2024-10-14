@@ -48,6 +48,21 @@
             width: 100px; /* Ajusta el tamaño de la firma */
             height: auto;
         }
+        .titulo{
+            font-size: 16px;
+            margin-top: 5px;
+            margin-bottom: 1px;
+        }
+        .subtitulo{
+            font-size: 14px;
+            margin: 2px;
+            margin-bottom: 1px;
+        }
+        .log {
+            font-size: 20px;
+            width: 100px;
+            background: #f1f1f1;
+        }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -67,9 +82,25 @@
     </script>
 </head>
 <body>
-    <h1 class="text">UNIVERSIDAD AUTONÓMA DEL BENI JOSÉ BALLIVIÁN <span class="text1"> CARRERA DE INGENÍERIA DE SISTEMAS</span></h1>
-    
-    <h3 class="">REPORTE DE ALCANCE INVESTIGACIÓN CIENTÍFICA</h3>
+    <table>
+        <thead>
+            <tr>
+                <th class="log">
+                    UAB
+                </th>
+                <th class="">
+                    <h3 class="titulo">UNIVERSIDAD AUTONÓMA DEL BENI JOSÉ BALLIVIÁN</h3>
+                    <p class="subtitulo">REPORTE DE ALCANZE INVESTIGACIÓN CIENTIFICA</p>
+                </th>
+                <th class="log">JE-CIS
+                   
+                </th>
+                
+            </tr>
+            
+            
+        </thead>
+    </table><br>
     <table>
         <thead>
             <tr>
@@ -84,16 +115,16 @@
                 <td>{{ actividad.invfecha_creacion|date:"d/m/Y" }}</td>
 
                 <td id="descrip">
-                    <ul class="pl">{{ actividad.user.apellido }} {{ actividad.user.nombre }}</ul>
+                    <ul class="pl">{{ actividad.user.apellidoM }} {{ actividad.user.apellido }} {{ actividad.user.nombre }}</ul>
                     <ul id="estudianteUno">
                         {% if actividad.user_uno %}
-                        {{ actividad.user_uno.apellido }} {{ actividad.user_uno.nombre }}
+                        {{ actividad.user_uno.apellidoM }} {{ actividad.user_uno.apellido }} {{ actividad.user_uno.nombre }}
                         {% endif %}
                     </ul>
                     <!-- Datos del tercer estudiante (estudiante_dos) -->
                     <ul id="estudianteDos">
                         {% if actividad.user_dos %}
-                        {{ actividad.user_dos.apellido }} {{ actividad.user_dos.nombre }}
+                        {{ actividad.user_dos.apellidoM }} {{ actividad.user_dos.apellido }} {{ actividad.user_dos.nombre }}
                         {% endif %}
                     </ul>
                 </td>   
@@ -116,7 +147,7 @@
                 <td>{{ actividad.investado }}</td>
                 {% for comentario in comentarios %}
                 <td class="des">
-                    {{ comentario.user.apellido }} {{ comentario.user.nombre }} <br>
+                    {{ comentario.user.apellidoM }} {{ comentario.user.apellido }} {{ comentario.user.nombre }} <br>
                     {{ comentario.invcomentario }}
                 </td>
                
@@ -127,7 +158,7 @@
     
         <ul >
           <br><br><br><br>
-          <span>{{ comentario.user.docente.titulo }} {{ comentario.user.apellido }} {{ comentario.user.nombre }}<br>
+          <span>{{ comentario.user.docente.titulo }} {{ comentario.user.apellidoM }} {{ comentario.user.apellido }} {{ comentario.user.nombre }}<br>
           Docente de Modalida Graduación</span>
 
         

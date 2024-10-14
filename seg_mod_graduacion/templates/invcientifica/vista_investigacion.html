@@ -21,13 +21,13 @@
     
         // Agregar solo las imágenes y nombres que existen
         if ("{{ proyecto.user.imagen|default_if_none:'' }}" && "{{ proyecto.user.nombre }}") {
-            images.push({ src: "{{ proyecto.user.imagen.url }}", name: "{{ proyecto.user.nombre }} {{ proyecto.user.apellido }}" });
+            images.push({ src: "{{ proyecto.user.imagen.url }}", name: "{{ proyecto.user.nombre }} {{ proyecto.user.apellido }} {{ proyecto.user.apellidoM }}" });
         }
         if ("{{ proyecto.user_uno.imagen|default_if_none:'' }}" && "{{ proyecto.user_uno.nombre }}") {
-            images.push({ src: "{{ proyecto.user_uno.imagen.url }}", name: "{{ proyecto.user_uno.nombre }} {{ proyecto.user_uno.apellido }}" });
+            images.push({ src: "{{ proyecto.user_uno.imagen.url }}", name: "{{ proyecto.user_uno.nombre }} {{ proyecto.user_uno.apellido }} {{ proyecto.user_uno.apellidoM }}" });
         }
         if ("{{ proyecto.user_dos.imagen|default_if_none:'' }}" && "{{ proyecto.user_dos.nombre }}") {
-            images.push({ src: "{{ proyecto.user_dos.imagen.url }}", name: "{{ proyecto.user_dos.nombre }} {{ proyecto.user_dos.apellido }}" });
+            images.push({ src: "{{ proyecto.user_dos.imagen.url }}", name: "{{ proyecto.user_dos.nombre }} {{ proyecto.user_dos.apellido }} {{ proyecto.user_dos.apellidoM }}" });
         }
     
         let currentIndex = 0;
@@ -58,7 +58,7 @@
       <div class="col-md-7 col-lg-8 pb-5">
         <div class="card-body">
           <!-- Texto con formato pre -->
-          <pre class="fecha fontI colorestados">Estudiante: <span id="profileName" class="estado colortext">{{ proyecto.user.nombre }} {{ proyecto.user.apellido }}</span>     Enviado el : {{ proyecto.invfecha_creacion|date:"d/m/Y h:i:s A" }}</pre>
+          <pre class="fecha fontI colorestados">Estudiante: <span id="profileName" class="estado colortext">{{ proyecto.user.nombre }} {{ proyecto.user.apellido }} {{ proyecto.user.apellidoM }}</span>     Enviado el : {{ proyecto.invfecha_creacion|date:"d/m/Y h:i:s A" }}</pre>
           <!-- Título -->
           <h5 class="title pb-1 text-center fontI colortitle ">{{ proyecto.invtitulo }}</h5>
           <!-- Descripción -->
@@ -85,7 +85,7 @@
           <h5 class="text fontI colortitle text-center">Comentarios</h5>
           {% for invcomentario in proyecto.comentarioinvcientifica_set.all %}
           <h6 class="text-end fontI  colorestados fechas ">
-            {{ invcomentario.invfecha_post|date:"d/m/Y h:i:s A" }} Por:  <span class="colortext fontI fecha">{{ invcomentario.user.docente.titulo }} {{ invcomentario.user.nombre }} {{ invcomentario.user.apellido }}</span>
+            {{ invcomentario.invfecha_post|date:"d/m/Y h:i:s A" }} Por:  <span class="colortext fontI fecha">{{ invcomentario.user.docente.titulo }} {{ invcomentario.user.nombre }} {{ invcomentario.user.apellido }} {{ invcomentario.user.apellidoM }}</span>
           </h6>
           <p class="comentario fontI colortext">Comentario:<br>{{ invcomentario.invcomentario }}</p>
           {% if invcomentario.invdocorregido %}

@@ -64,6 +64,9 @@ urlpatterns = [
     path('exportar_excel/', views.exportar_excel, name='exportar_excel'),
     path('exportar_excel_perfiles/', views.exportar_excel_perfiles, name='exportar_excel_perfiles'),
     
+    
+    path('aprobar_actividad/<int:actividad_id>/', views.aprobar_actividad, name='aprobar_actividad'),
+    
 ]
 #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 handler403 = handle_permission_denied

@@ -11,6 +11,7 @@ ESTADO_CHOICES = [
     ('Aprobado', 'Aprobado'),
     ('Pendiente', 'Pendiente'),
     ('Rechazado', 'Rechazado'),
+    ('Preapro', 'Preapro'),
 ]
 
 RESULTADO_CHOICES = [
@@ -36,7 +37,7 @@ class Modalidad(models.Model):
 class Estudiante(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     dni = models.CharField(max_length=20)
-    carrera = models.CharField(max_length=100)
+    Ru = models.CharField(max_length=20, null=True, blank=True)
     
 class Docente(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

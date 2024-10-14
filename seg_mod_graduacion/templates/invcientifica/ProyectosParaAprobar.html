@@ -23,7 +23,7 @@
         <div class="col-md-7 px-2">
           <div class="card-body"><br>
             <h5 class="title pb-1 fontI colortitle">Título : {{ proyecto.invtitulo }}</h5>
-            <h5 class="fontI colorestados">Estudiante: <span id="profileName" class="fontI colortext">{{ proyecto.user.nombre }} {{ proyecto.user.apellido }}</span></h5>
+            <h5 class="fontI colorestados">Estudiante: <span id="profileName" class="fontI colortext">{{ proyecto.user.nombre }} {{ proyecto.user.apellido }} {{ proyecto.user.apellidoM }}</span></h5>
             <p class="fontI px-1 colortext">Descripción:<br>{{ proyecto.invdescripcion }}</p>
             <h2 class="no-guttee col-lg-6 py-2 col-7 " data-label="Documento Proyecto"><a href="{{ proyecto.invdocumentacion.url }}" class="list-group-item list-group-item-action">
               <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-files" viewBox="0 0 16 16">
@@ -63,13 +63,13 @@
   
       // Agregar solo las imágenes y nombres que existen
       if ("{{ proyecto.user.imagen|default_if_none:'' }}" && "{{ proyecto.user.nombre }}") {
-          images.push({ src: "{{ proyecto.user.imagen.url }}", name: "{{ proyecto.user.nombre }} {{ proyecto.user.apellido }}" });
+          images.push({ src: "{{ proyecto.user.imagen.url }}", name: "{{ proyecto.user.nombre }} {{ proyecto.user.apellido }} {{ proyecto.user.apellidoM }}" });
       }
       if ("{{ proyecto.user_uno.imagen|default_if_none:'' }}" && "{{ proyecto.user_uno.nombre }}") {
-          images.push({ src: "{{ proyecto.user_uno.imagen.url }}", name: "{{ proyecto.user_uno.nombre }} {{ proyecto.user_uno.apellido }}" });
+          images.push({ src: "{{ proyecto.user_uno.imagen.url }}", name: "{{ proyecto.user_uno.nombre }} {{ proyecto.user_uno.apellido }} {{ proyecto.user_uno.apellidoM }}" });
       }
       if ("{{ proyecto.user_dos.imagen|default_if_none:'' }}" && "{{ proyecto.user_dos.nombre }}") {
-          images.push({ src: "{{ proyecto.user_dos.imagen.url }}", name: "{{ proyecto.user_dos.nombre }} {{ proyecto.user_dos.apellido }}" });
+          images.push({ src: "{{ proyecto.user_dos.imagen.url }}", name: "{{ proyecto.user_dos.nombre }} {{ proyecto.user_dos.apellido }} {{ proyecto.user_dos.apellidoM }}" });
       }
   
       let currentIndex = 0;

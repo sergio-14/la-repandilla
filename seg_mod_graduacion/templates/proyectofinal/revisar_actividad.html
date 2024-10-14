@@ -20,7 +20,7 @@
                             {% endif %}
                         </div>
                         <p class="fontI fechas colortext pt-1 text-center">Tribunal Calificador
-                          <br> {{ actividad.jurado_1.nombre }} {{ actividad.jurado_1.apellido }}</p>
+                          <br> {{ actividad.jurado_1.nombre }} {{ actividad.jurado_1.apellido }} {{ actividad.jurado_1.apellidoM }}</p>
                         <input data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Marque solo si esta conforme con el documento" class="form-check-input ms-2" type="checkbox" id="jurado_1_aprobado" name="jurado_1_aprobado" {% if actividad.jurado_1_aprobado %}checked{% endif %} {% if request.user != actividad.jurado_1 %}disabled{% endif %}>
                         <label class="ms-1 form-check-label text colortext" for="jurado_1_aprobado">
                             Revisión: 
@@ -41,7 +41,7 @@
                             {% endif %}
                         </div>
                         <p class="fontI fechas colortext pt-1 text-center">Tribunal Calificador
-                          <br>{{ actividad.jurado_2.nombre }} {{ actividad.jurado_2.apellido }}</p>
+                          <br>{{ actividad.jurado_2.nombre }} {{ actividad.jurado_2.apellido }} {{ actividad.jurado_2.apellidoM }}</p>
                         <input class="form-check-input ms-2" type="checkbox" id="jurado_2_aprobado" name="jurado_2_aprobado" {% if actividad.jurado_2_aprobado %}checked{% endif %} {% if request.user != actividad.jurado_2 %}disabled{% endif %}>
                         <label data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Marque solo si esta conforme con el documento" class="ms-1 text colortext form-check-label" for="jurado_2_aprobado">
                             Revisión: 
@@ -62,7 +62,7 @@
                             {% endif %}
                         </div>
                         <p class="fontI fechas colortext pt-1 text-center">Tribunal Calificador 
-                          <br>{{ actividad.jurado_3.nombre }} {{ actividad.jurado_3.apellido }}</p>
+                          <br>{{ actividad.jurado_3.nombre }} {{ actividad.jurado_3.apellido }} {{ actividad.jurado_3.apellidoM }}</p>
                         <input data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Marque solo si esta conforme con el documento" class="form-check-input ms-2" type="checkbox" id="jurado_3_aprobado" name="jurado_3_aprobado" {% if actividad.jurado_3_aprobado %}checked{% endif %} {% if request.user != actividad.jurado_3 %}disabled{% endif %}>
                         <label class="ms-1 text colortext form-check-label" for="jurado_3_aprobado">
                             Revisión: 

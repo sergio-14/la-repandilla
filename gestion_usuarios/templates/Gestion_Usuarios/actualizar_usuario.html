@@ -28,16 +28,16 @@
             <div class="row radio-border= 50%">
                 <div class="col-md-8">
                     <div class="form-group">
-                        {{ form.imagen.label_tag }}
-                        {{ form.imagen }}
-                        {{ form.imagen.errors }}
+                        <label for="id_imagen">Imagen</label>
+                        <input type="file" name="imagen" id="id_imagen">
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="form-group">
-                        <img id="preview" src="{% if form.instance.imagen %}{{ form.instance.imagen.url }}{% endif %}" 
+                        <img id="preview" 
+                             src="{% if form.instance.imagen %}{{ form.instance.imagen.url }}{% endif %}" 
                              alt="Vista previa de la imagen" 
-                             style="max-width: 150px; height: 150px; border-radius: 50%;">
+                             style="max-width: 150px; height: 150px; border-radius: 50%; display: none;">
                     </div>
                 </div>
             </div>
@@ -53,9 +53,13 @@
                     {{ form.nombre.label_tag }}
                     {{ form.nombre }}
                 </div>
-                <div class="col-6 form-group">
+                <div class="col-3 form-group">
                     {{ form.apellido.label_tag }}
                     {{ form.apellido }}
+                </div>
+                <div class="col-3 form-group">
+                    {{ form.apellidoM.label_tag }}
+                    {{ form.apellidoM }}
                 </div>
             </div>
             <div class="row fontf">
@@ -182,9 +186,9 @@
         
         reader.onload = function(){
             var dataURL = reader.result;
-            var preview = document.getElementById('preview');
+            var preview = document.getElementById('preview');  // Asegúrate de seleccionar el correcto
             preview.src = dataURL;
-            preview.style.display = 'block';
+            preview.style.display = 'block';  // Muestra la vista previa cuando se selecciona la imagen
         };
         
         if (input.files.length > 0) {
@@ -193,14 +197,15 @@
             document.getElementById('preview').style.display = 'none';
         }
     });
-
+    
     // Mostrar la imagen previa si existe al cargar la página
     window.onload = function() {
         var preview = document.getElementById('preview');
-        if (preview.src) {
-            preview.style.display = 'block';
+        if (preview.src && preview.src !== '') {
+            preview.style.display = 'block';  // Mostrar la imagen si ya existe al cargar la página
         }
     };
+    
 </script>
 
 

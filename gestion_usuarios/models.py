@@ -31,7 +31,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     imagen = models.ImageField(upload_to='path/to/upload', null=True, blank=True)
     nombre = models.CharField(max_length=50)
     apellido = models.CharField(max_length=50)
-    Ru = models.CharField(max_length=20, null=True, blank=True, unique=True)  
+    apellidoM = models.CharField(max_length=50, null=True, blank=True)
     fecha_nac = models.DateField(null=True, blank=True)
     telefono = models.CharField(max_length=20, null=True, blank=True)
     estado = models.BooleanField(default=False)
@@ -52,5 +52,5 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['nombre', 'apellido']
 
     def __str__(self):
-        return f'{self.nombre} {self.apellido}'
+        return f'{self.nombre} {self.apellido} {self.apellidoM}'
 

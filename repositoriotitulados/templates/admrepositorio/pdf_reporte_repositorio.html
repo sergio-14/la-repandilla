@@ -53,6 +53,21 @@
             width: 100px; /* Ajusta el tamaño de la firma */
             height: auto;
         }
+        .titulo{
+            font-size: 16px;
+            margin-top: 5px;
+            margin-bottom: 1px;
+        }
+        .subtitulo{
+            font-size: 14px;
+            margin: 2px;
+            margin-bottom: 1px;
+        }
+        .log {
+            font-size: 20px;
+            width: 100px;
+            background: #f1f1f1;
+        }
     </style>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -72,11 +87,22 @@
     </script>
 </head>
 <body>
-    <h1 class="text">UNIVERSIDAD AUTONÓMA DEL BENI JOSÉ BALLIVIÁN</h1>
-    <h2 class="text1">CARRERA DE INGENIERÍA DE SISTEMAS</h2>
-    
-    <hr>
-    <h3 class="title">REPORTE DE EGRESADOS PROYECTO FINAL</h3>
+    <table>
+        <thead>
+            <tr>
+                <th class="log">
+                    UAB
+                </th>
+                <th class="">
+                    <h3 class="titulo">UNIVERSIDAD AUTONÓMA DEL BENI JOSÉ BALLIVIÁN</h3>
+                    <p class="subtitulo">REPORTE DE REPOSITORIOS ACADÉMICOS DE EGRESADOS</p>
+                </th>
+                <th class="log">JE-CIS
+                   
+                </th>
+            </tr>
+        </thead>
+    </table><br>
     {% for actividad in actividades_repositorio %}
     <table>
         <thead>
@@ -90,16 +116,16 @@
             <tr>
                 <td>{{ actividad.fecha }}</td>
                 <td id="estudiante">
-                    {{ actividad.estudiante.apellido }} {{ actividad.estudiante.nombre }}
+                    {{ actividad.estudiante.apellidoM }} {{ actividad.estudiante.apellido }} {{ actividad.estudiante.nombre }}
                     <ul id="estudianteUno">
                         {% if actividad.estudiante_uno %}
-                        {{ actividad.estudiante_uno.apellido }} {{ actividad.estudiante_uno.nombre }}
+                        {{ actividad.estudiante_uno.apellidoM }} {{ actividad.estudiante_uno.apellido }} {{ actividad.estudiante_uno.nombre }}
                         {% endif %}
                     </ul>
                     <!-- Datos del tercer estudiante (estudiante_dos) -->
                     <ul id="estudianteDos">
                         {% if actividad.estudiante_dos %}
-                        {{ actividad.estudiante_dos.apellido }} {{ actividad.estudiante_dos.nombre }}
+                        {{ actividad.estudiante_dos.apellidoM }} {{ actividad.estudiante_dos.apellido }} {{ actividad.estudiante_dos.nombre }}
                         {% endif %}
                     </ul>
                 </td>
@@ -115,11 +141,11 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{ actividad.tutor.docente.titulo }} {{ actividad.tutor.apellido }} {{ actividad.tutor.nombre }}</td>
+                <td>{{ actividad.tutor.docente.titulo }} {{ actividad.tutor.apellidoM }} {{ actividad.tutor.apellido }} {{ actividad.tutor.nombre }}</td>
                 <td class="descrip">
-                    {{ actividad.jurado_1.docente.titulo }} {{ actividad.jurado_1.apellido }} {{ actividad.jurado_1.nombre }}<br>
-                    {{ actividad.jurado_2.docente.titulo }} {{ actividad.jurado_2.apellido }} {{ actividad.jurado_2.nombre }}<br>
-                    {{ actividad.jurado_3.docente.titulo }} {{ actividad.jurado_3.apellido }} {{ actividad.jurado_3.nombre }}
+                    {{ actividad.jurado_1.docente.titulo }} {{ actividad.jurado_1.apellidoM }} {{ actividad.jurado_1.apellido }} {{ actividad.jurado_1.nombre }}<br>
+                    {{ actividad.jurado_2.docente.titulo }} {{ actividad.jurado_2.apellidoM }} {{ actividad.jurado_2.apellido }} {{ actividad.jurado_2.nombre }}<br>
+                    {{ actividad.jurado_3.docente.titulo }} {{ actividad.jurado_3.apellidoM }} {{ actividad.jurado_3.apellido }} {{ actividad.jurado_3.nombre }}
                 </td>
                 <td>{{ actividad.guia_externo }}</td>
             </tr>

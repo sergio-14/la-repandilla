@@ -20,7 +20,7 @@
                         <img src="{% static 'img/SINFOTO.webp' %}" class="rounded-circle me-lg-2" alt="Sin foto" style="width: 60px; height: 60px;">
                     {% endif %}
                 </td>
-                <td data-label="APELLIDOS">{{ usuario.apellido }}</td>
+                <td data-label="APELLIDOS">{{ usuario.apellido }} {{ usuario.apellidoM }}</td>
                 <td data-label="NOMBRES">{{ usuario.nombre }}</td>
                 <td data-label="GRUPO">{% for grupo in usuario.groups.all %}
                     {{ grupo.name }}{% if not forloop.last %}, {% endif %}

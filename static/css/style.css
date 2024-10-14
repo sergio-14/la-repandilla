@@ -205,7 +205,7 @@ select {
 }
 
 ::-webkit-scrollbar {
-  width: 1px;
+  width: 3px;
 }
 
 /* Fondo del scrollbar */

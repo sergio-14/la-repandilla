@@ -27,19 +27,19 @@
         <form id="update-user-form" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <!-- User Image Section -->
-            <div class="row">
+            <div class="row radio-border= 50%">
                 <div class="col-md-8">
                     <div class="form-group">
-                        {{ user_form.imagen.label_tag }}
-                        {{ user_form.imagen }}
-                        {{ user_form.imagen.errors }}
+                        <label for="id_imagen">Imagen</label>
+                        <input type="file" name="imagen" id="id_imagen">
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="form-group text-center">
-                        <img id="preview" src="{% if form.instance.imagen %}{{ form.instance.imagen.url }}{% endif %}" 
+                    <div class="form-group">
+                        <img id="preview" 
+                             src="{% if form.instance.imagen %}{{ form.instance.imagen.url }}{% endif %}" 
                              alt="." 
-                             style="max-width: 150px; height: 150px; border-radius: 50%;">
+                             style="max-width: 150px; height: 150px; border-radius: 50%; display: none;">
                     </div>
                 </div>
             </div>
@@ -50,9 +50,13 @@
                     {{ user_form.nombre.label_tag }}
                     {{ user_form.nombre }}
                 </div>
-                <div class="col-md-6 form-group">
+                <div class="col-md-3 form-group">
                     {{ user_form.apellido.label_tag }}
                     {{ user_form.apellido }}
+                </div>
+                <div class="col-md-3 form-group">
+                    {{ user_form.apellidoM.label_tag }}
+                    {{ user_form.apellidoM }}
                 </div>
             </div>
         
@@ -118,8 +122,8 @@
             <!-- Submit and Cancel Buttons -->
             <div class="row">
                 <div class="col-md-12 text-right">
-                    <button type="submit" class="btn btn-dark">Guardar</button>
-                    <a href="{% url 'dashboard' %}" class="btn btn-secondary">Cancelar Cambios</a>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <a href="{% url 'dashboard' %}" class="btn btn-danger">Cancelar Cambios</a>
                 </div>
             </div>
         </form><br>
@@ -133,9 +137,9 @@
         
         reader.onload = function(){
             var dataURL = reader.result;
-            var preview = document.getElementById('preview');
+            var preview = document.getElementById('preview');  // Asegúrate de seleccionar el correcto
             preview.src = dataURL;
-            preview.style.display = 'block';
+            preview.style.display = 'block';  // Muestra la vista previa cuando se selecciona la imagen
         };
         
         if (input.files.length > 0) {
@@ -144,15 +148,15 @@
             document.getElementById('preview').style.display = 'none';
         }
     });
-
-   
+    
     // Mostrar la imagen previa si existe al cargar la página
     window.onload = function() {
         var preview = document.getElementById('preview');
-        if (preview.src) {
-            preview.style.display = 'block';
+        if (preview.src && preview.src !== '') {
+            preview.style.display = 'block';  // Mostrar la imagen si ya existe al cargar la página
         }
     };
+    
 </script>
 
 {% endblock %}

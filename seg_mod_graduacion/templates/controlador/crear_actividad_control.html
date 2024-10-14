@@ -18,19 +18,21 @@
           {% csrf_token %}
           <div class="fechas">
             <div class="row mb-3">
-              <div class="col-md-4 pt-1">
+              <div class="col-md-12 pt-1">
                 {{ form.estudiante.label_tag }} <br>{{ form.estudiante }}
               </div>
-              <div class="col-md-4 pt-1">
+            </div><br>
+            <div class="row mb-3">
+              <div class="col-md-6 pt-1">
                 {{ form.estudiante_uno.label_tag }} <br>{{ form.estudiante_uno }}
               </div>
-              <div class="col-md-4 pt-1">
+              <div class="col-md-6 pt-1">
                 {{ form.estudiante_dos.label_tag }} <br>{{ form.estudiante_dos }}
               </div>
-              <div class="col-md-4 pt-1">
+              <div class="col-md-6 pt-1">
                 {{ form.tutor.label_tag }} <br>{{ form.tutor }}
               </div>
-              <div class="col-md-4 pt-1">
+              <div class="col-md-6 pt-1">
                 {{ form.modalidad.label_tag }}<br> {{ form.modalidad }}
               </div>
             </div>
@@ -55,7 +57,6 @@
     </div>
   </div>
 </div><br>
-
 <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content bg-mdal">
@@ -73,7 +74,9 @@
     </div>
   </div>
 </div>
+
 {% block scripts %}
+  
 <script>
   document.getElementById('id_estudiante').addEventListener('change', function() {
     let estudianteId = this.value;  // Asume que id_estudiante es el id del campo de selección

@@ -19,13 +19,13 @@ class CustomUserAdmin(BaseUserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
     model = User
-    list_display = ('email', 'nombre', 'apellido',  'get_groups', 'is_active', 'is_staff', 'is_superuser')
-    search_fields = ('email', 'nombre', 'apellido', 'Ru', 'ci')
+    list_display = ('email', 'nombre', 'apellido', 'apellidoM',  'get_groups', 'is_active', 'is_staff', 'is_superuser')
+    search_fields = ('email', 'nombre', 'apellido', )
     ordering = ('email',)
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('nombre', 'apellido', 'imagen', 'Ru', 'ci', 'fecha_nac', 'telefono', 'firma', 'estado')}),
+        ('Personal info', {'fields': ('nombre', 'apellido','apellidoM', 'imagen', 'fecha_nac', 'telefono','estado')}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
@@ -33,7 +33,7 @@ class CustomUserAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'nombre', 'apellido', 'Ru', 'ci', 'is_active', 'is_staff', 'is_superuser', 'password1', 'password2', 'groups'),
+            'fields': ('email', 'nombre', 'apellido','apellidoM', 'is_active', 'is_staff', 'is_superuser', 'password1', 'password2', 'groups'),
         }),
     )
 

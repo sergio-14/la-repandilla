@@ -64,13 +64,7 @@
   border: 3px solid #0a4049;
 }
 
-.roundedd-img {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid #0a4049;
-}
+
 
 .stilo {
   font-family: "Anton";
@@ -110,6 +104,10 @@
 }
 .textdate {
   color: #ac4616;
+  font-family: "Anton";
+}
+.texttol {
+  color: #00417e;
   font-family: "Anton";
 }
 .textmension {
@@ -154,7 +152,7 @@
   width: 70px;
   padding: 2px;
   filter: drop-shadow(rgb(1, 29, 37));
-  background: #4b2309;
+  background: #ffffff;
   box-shadow: 9px 9px 9px #a6a6a6, -9px -9px 9px #ffffff;
 }
 
@@ -214,7 +212,7 @@
 .table .descrip {
   font-size: 13px;
   padding: 2px;
-  width: 200px;
+  width: 350px;
   text-align: left;
   vertical-align: middle;
 }
@@ -223,12 +221,13 @@
   padding: 2px;
   width: 170px;
   text-align: left;
+ 
   vertical-align: middle;
 }
 
 .table thead th {
   text-transform: uppercase;
-  background-color: #031a22;
+  background-color: #083477;
   color: #eef3f1;
 }
 
@@ -381,6 +380,42 @@
   display: none; /* Ocultar por defecto */
 }
 
+.img-close{
+  width:250px ;
+  height:230px ;
+  
+}
+
+.foto-container {
+  display: flex;
+  justify-content: flex-start;
+  position: relative; /* Necesario para que las imágenes se posicionen relativas al contenedor */
+  width: 100px; /* Ajusta según el tamaño de la imagen */
+  height: 100px; /* Ajusta según el tamaño de la imagen */
+}
+
+.foto-container img {
+  position: absolute; /* Para superponer las imágenes */
+  top: 20px;
+  left: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%; 
+  object-fit: cover;
+  border: 2px solid #d8d8d8;
+  box-shadow: 9px 9px 9px #a6a6a6, -9px -9px 9px #ffffff00;
+}
+
+.foto-container img:nth-child(2) {
+  left: 50px; /* Desplaza la segunda imagen 20px a la derecha */
+}
+
+.foto-container img:nth-child(3) {
+  left: 90px; /* Desplaza la tercera imagen 40px a la derecha */
+}
+
+
+
 /* Mostrar solo en dispositivos móviles con un ancho máximo de 800px */
 @media (max-width: 770px) {
   #imgmujersocial{
@@ -458,9 +493,4 @@
     display: block;
     transform: translateY(0);
   }
-}
-.img-close{
-  width:250px ;
-  height:230px ;
-  
 }

@@ -654,7 +654,9 @@ def crear_actividad(request):
         actividad = None
 
     # Verificar si el estudiante ya tiene un RepositorioTitulados asignado
-    repositorio_asignado = RepositorioTitulados.objects.filter(estudiante=estudiante).first()
+    repositorio_asignado = RepositorioTitulados.objects.filter(
+        Q(estudiante=estudiante) | Q(estudiante_uno=estudiante) | Q(estudiante_dos=estudiante)
+    ).first()
 
     if repositorio_asignado:
         # Si ya tiene un repositorio asignado, deshabilitar el formulario
@@ -680,6 +682,8 @@ def crear_actividad(request):
         'actividad': actividad,
         'repositorio_asignado': repositorio_asignado
     })
+
+
 
 def lista_actividad(request):
     user = request.user
@@ -743,14 +747,20 @@ from django.db.models import Q
 @login_required
 def listaactividades(request):
     usuario = request.user
+    
+    # Filtra las actividades que tienen el estado 'Preapro' y que no son 'Aprobado' ni 'Pendiente'
     actividades = ProyectoFinal.objects.filter(
-        Q(tutor=usuario) | Q(jurado_1=usuario) | Q(jurado_2=usuario) | Q(jurado_3=usuario)
+        Q(tutor=usuario) | Q(jurado_1=usuario) | Q(jurado_2=usuario) | Q(jurado_3=usuario),
+        estado='Preapro'  # Filtra solo las actividades con estado 'Preapro'
     ).exclude(
-        estado='Aprobado'
+        Q(estado='Aprobado') | Q(estado='Pendiente')  # Excluye las actividades con estado 'Aprobado' o 'Pendiente'
     ).order_by('-fecha')
-    paginator = Paginator(actividades, 1) 
-    page_number = request.GET.get('page') 
-    actividades = paginator.get_page(page_number) 
+
+    # Paginación
+    paginator = Paginator(actividades, 1)  # 1 actividad por página
+    page_number = request.GET.get('page')
+    actividades = paginator.get_page(page_number)
+
     return render(request, 'controlador/listaactividades.html', {'actividades': actividades})
 
 @user_passes_test(lambda u: permiso_M_G(u, 'ADMMGS'))
@@ -771,6 +781,64 @@ def revision(request, actividad_id):
             return redirect('listaactividades')
 
     return render(request, 'controlador/revision.html', {'actividad': actividad, 'todos_aprobados': todos_aprobados})
+
+
+from django import forms
+class AprobarProyectoForm(forms.Form):
+    actcomentario = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),  
+        required=False,
+        label='Comentario Retroalimentativo'
+    )
+    actdocorregido = forms.FileField(
+        widget=forms.ClearableFileInput(attrs={'class': 'form-control'}),  
+        required=False,
+        label='Adjuntar Documento'
+    )
+    aprobar = forms.BooleanField(
+        required=False,
+        label='Aprobar Documento para Revisión de Tribunales',
+        widget=forms.CheckboxInput(attrs={'class': 'form-check-input'}) 
+    )
+    
+    
+
+def aprobar_actividad(request, actividad_id):
+    # Obtén la actividad que se desea aprobar
+    actividad = get_object_or_404(ProyectoFinal, id=actividad_id)
+    user = request.user  # Captura el usuario logueado
+
+    # Crea una instancia del formulario
+    if request.method == 'POST':
+        form = AprobarProyectoForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Cambiar el estado a 'Preapro' si el checkbox está marcado y la actividad está en estado 'Pendiente'
+            if form.cleaned_data['aprobar'] and actividad.estado == 'Pendiente':
+                actividad.estado = 'Preapro'
+                actividad.save()
+                messages.success(request, 'Actividad aprobada exitosamente.')
+
+            # Procesar el comentario y documento
+            comentario_texto = form.cleaned_data.get('actcomentario')
+            actdocorregido = form.cleaned_data.get('actdocorregido')
+
+            if comentario_texto or actdocorregido:
+                comentario = ComentarioProFinal(
+                    actcomentario=comentario_texto,
+                    user=user,
+                    actproyecto_relacionado=actividad,
+                    actdocorregido=actdocorregido
+                )
+                comentario.save()
+                messages.success(request, 'Comentario y documento guardados correctamente.')
+
+            return redirect('listaractividades')
+    else:
+        form = AprobarProyectoForm()  # Asegúrate de que el formulario se instancia aquí
+
+    # Renderiza la plantilla con el formulario
+    return render(request, 'controlador/aprobar_actividad.html', {'form': form, 'actividad': actividad})
+
 
 
 from django.views.generic.edit import CreateView, UpdateView
@@ -987,9 +1055,9 @@ def exportar_excel(request):
 
     # Obtener los datos del modelo InvCientifica
     datos = InvCientifica.objects.annotate(
-        estudiante1=Concat('user__nombre', Value(' '), 'user__apellido'),
-        estudiante2=Concat('user_uno__nombre', Value(' '), 'user_uno__apellido'),
-        estudiante3=Concat('user_dos__nombre', Value(' '), 'user_dos__apellido')
+        estudiante1=Concat('user__nombre', Value(' '), 'user__apellido', Value(' '),'user__apellidoM'),
+        estudiante2=Concat('user_uno__nombre', Value(' '), 'user_uno__apellido', Value(' '),'user_uno__apellidoM'),
+        estudiante3=Concat('user_dos__nombre', Value(' '), 'user_dos__apellido', Value(' '), 'user_dos__apellidoM')
     ).values_list(
         'id', 
         'estudiante1',  # Primer participante
@@ -1062,9 +1130,9 @@ def exportar_excel_perfiles(request):
 
     # Anotar los nombres completos y obtener los datos con el filtrado
     datos = perfiles.annotate(
-        estudiante1=Concat('user__nombre', Value(' '), 'user__apellido'),
-        estudiante2=Concat('user_uno__nombre', Value(' '), 'user_uno__apellido'),
-        estudiante3=Concat('user_dos__nombre', Value(' '), 'user_dos__apellido')
+        estudiante1=Concat('user__nombre', Value(' '), 'user__apellido', Value(' '),'user__apellidoM'),
+        estudiante2=Concat('user_uno__nombre', Value(' '), 'user_uno__apellido', Value(' '), 'user_uno__apellidoM'),
+        estudiante3=Concat('user_dos__nombre', Value(' '), 'user_dos__apellido', Value(' '), 'user_dos__apellidoM')
     ).values_list(
         'id', 
         'estudiante1',  # Primer participante

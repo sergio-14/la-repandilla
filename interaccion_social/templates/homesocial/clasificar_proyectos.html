@@ -7,10 +7,10 @@
             <div class="row">
                 <div class="col-9">
                     <label class="pb-2 card-name" for="gestion">Ingresa el Periodo y Gestión:</label> 
-                    <input type="text" name="gestion" id="gestion" class="form-control card-text card-ct" placeholder="Ejemplo: 1/2025">
+                    <input type="text" name="gestion" id="gestion" class="form-control card-text card-ct" placeholder="Ejemplo: '1/año' o 2/año">
                 </div>
                 <div class="col-3 pt-4">
-                    <button type="submit" class="btn btn-primary mt-2">Encontrar Datos</button>
+                    <button type="submit" class="btn btn-primary mt-2">Mostrar Datos</button>
                 </div>
             </div>
         </form><br>
@@ -22,7 +22,7 @@
                     {% for item in materias_con_proyectos %}
                         <li class="list-group-item card-texto">
                             {{ item.materia.nombre_materia }} <br>
-                            Persona: {{ item.persona.docente.titulo }} {{ item.persona.nombre }} {{ item.persona.apellido }} <br>
+                            Docente: {{ item.persona.docente.titulo }} {{ item.persona.nombre }} {{ item.persona.apellido }} {{ item.persona.apellidoM }} <br>
                             
                             <input type="checkbox" checked disabled class="ml-2">
                         </li>
@@ -34,7 +34,12 @@
                 <ul class="list-group card-ct pb-4">
                     {% for materia in materias_sin_proyectos %}
                         <li class="list-group-item card-texto">
-                            {{ materia.S_Materia }}
+                            {{ materia.nombre_materia }}
+                            {% comment %} {% if materia.docente %}
+                                Docente: {{ materia.docente.titulo }} {{ materia.docente.nombre }} {{ materia.docente.apellido }} {{ materia.docente.apellidoM }} <br>
+                            {% else %}
+                                Docente no asignado <br>
+                            {% endif %} {% endcomment %}
                             <input type="checkbox" disabled class="ml-2">
                         </li>
                     {% endfor %}

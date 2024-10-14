@@ -1,6 +1,6 @@
 {% extends 'dashboard.html' %} 
 {% block content %}
-<h1 class="text-center titlesuperior colortitle py-lg-2 py-5">PRESENTACION FORMULARIO DE PROYECTO INTERACCIÓN SOCIAL</h1>
+<h1 class="text-center titlesuperior colortitle py-lg-2 py-5">Prevista de Investigación Extension e Interacción Social</h1>
 {% for proyecto in page_obj %}
 <div class="container mt-3">
   <div class="card narrow-card">
@@ -15,7 +15,7 @@
       </div>
       {% endif %}
       <div class="col-md-9 px-lg-3  pb-5">
-        <h2 class="text colorestados fontI text-end pt-5 me-4 ">Docente:<pan class="colortext"> {{ persona.docente.titulo }} {{ persona.nombre }} {{ persona.apellido }}</span></h2>
+        <h2 class="text colorestados fontI text-end pt-5 me-4 ">Docente:<pan class="colortext"> {{ persona.docente.titulo }} {{ persona.nombre }} {{ persona.apellido }} {{ persona.apellidoM }}</span></h2>
         <div class="card-body">
           <pre class="fecha colorfechas fontI">Fecha de Inicio: {{ proyecto.Fecha_Inicio|date:"d/m/Y"  }}                                                  Termino en : {{ proyecto.Fecha_Finalizacion|date:"d/m/Y"  }}</pre>
           <h5 class=" fontI  title"><span class="colorestados text">Título:</span><br>{{ proyecto.S_Titulo }}</h5>
