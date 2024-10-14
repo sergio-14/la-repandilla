@@ -181,16 +181,16 @@
                     <th class="espacios"></th>
                     <th class="des">Postulante Nombre Completo</th>
                     <th id="descripp"> 
-                        <li class="pl">{{ acta.estudiante.apellidoM }} {{ acta.estudiante.apellido }} {{ acta.estudiante.nombre }}</li>
+                        <li class="pl">{{ acta.estudiante.apellido }} {{ acta.estudiante.apellidoM }} {{ acta.estudiante.nombre }}</li>
                         <li class="pl" id="estudianteUno">
                             {% if acta.estudiante_uno %}
-                            {{ acta.estudiante_uno.apellidoM }} {{ acta.estudiante_uno.apellido }} {{ acta.estudiante_uno.nombre }}
+                            {{ acta.estudiante_uno.apellido }} {{ acta.estudiante_uno.apellidoM }} {{ acta.estudiante_uno.nombre }}
                             {% endif %}
                         </li>
                         <!-- Datos del tercer estudiante (estudiante_dos) -->
                         <li class="pl" id="estudianteDos">
                             {% if acta.estudiante_dos %}
-                            {{ acta.estudiante_dos.apellidoM }} {{ acta.estudiante_dos.apellido }} {{ acta.estudiante_dos.nombre }}
+                            {{ acta.estudiante_dos.apellido }} {{ acta.estudiante_dos.apellidoM }} {{ acta.estudiante_dos.nombre }}
                             {% endif %}
                         </li>
                     </th>
@@ -205,7 +205,7 @@
                 <tr>
                     <th class="espacios"></th>
                     <th class="des">Tutor del Proyecto</th>
-                    <th class="descrip">{{ acta.tutor.docente.titulo }} {{ acta.tutor.apellidoM }} {{ acta.tutor.apellido }} {{ acta.tutor.nombre }} </th>
+                    <th class="descrip">{{ acta.tutor.docente.titulo }} {{ acta.tutor.apellido }} {{ acta.tutor.apellidoM }} {{ acta.tutor.nombre }} </th>
                     <th class="espacios"></th>
                 </tr>
                 
@@ -245,19 +245,19 @@
              <tr>
                  <th class="espacios"></th>
                  <th class="des">1er. Tribunal </th>
-                 <th class="descrip">{{ acta.jurado_1.docente.titulo }} {{ acta.jurado_1.apellidoM }} {{ acta.jurado_1.apellido }} {{ acta.jurado_1.nombre }}</th>
+                 <th class="descrip">{{ acta.jurado_1.docente.titulo }} {{ acta.jurado_1.apellido }} {{ acta.jurado_1.apellidoM }} {{ acta.jurado_1.nombre }}</th>
                  <th class="espacios"></th>
              </tr>
              <tr>
                  <th class="espacios"></th>
                  <th class="des">2do. Tribunal </th>
-                 <th class="descrip">{{ acta.jurado_2.docente.titulo }} {{ acta.jurado_2.apellidoM }} {{ acta.jurado_2.apellido }} {{ acta.jurado_2.nombre }} </th>
+                 <th class="descrip">{{ acta.jurado_2.docente.titulo }} {{ acta.jurado_2.apellido }} {{ acta.jurado_2.apellidoM }} {{ acta.jurado_2.nombre }} </th>
                  <th class="espacios"></th>
              </tr>
              <tr>
                  <th class="espacios"></th>
                  <th class="des">3er. Tribunal </th>
-                 <th class="descrip">{{ acta.jurado_3.docente.titulo }} {{ acta.jurado_3.apellidoM }} {{ acta.jurado_3.apellido }} {{ acta.jurado_3.nombre }} </th>
+                 <th class="descrip">{{ acta.jurado_3.docente.titulo }} {{ acta.jurado_3.apellido }} {{ acta.jurado_3.apellidoM }} {{ acta.jurado_3.nombre }} </th>
                  <th class="espacios"></th>
              </tr>
              

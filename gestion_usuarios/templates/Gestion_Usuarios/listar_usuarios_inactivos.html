@@ -27,7 +27,7 @@
                 {% for usuario in page_obj %}
                 <tr>
                     <td data-label="EMAIL">{{ usuario.email }}</td>
-                    <td data-label="NOMBRE">{{ usuario.nombre }} {{ usuario.apellido }}</td>
+                    <td data-label="NOMBRE">{{ usuario.apellido }} {{ usuario.apellidoM }} {{ usuario.nombre }} </td>
                     <td data-label="ACCIONES">
                         <a class="btn btn-outline-success" href="javascript:void(0);" onclick="confirmReactivar('{{ usuario.pk }}')">
                             Reactivar

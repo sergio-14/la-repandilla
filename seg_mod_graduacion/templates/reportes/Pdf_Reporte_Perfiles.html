@@ -102,16 +102,16 @@
             <tr>
                 <td>{{ actividad.perfecha_creacion|date:"d/m/Y" }}</td>
                 <td id="descrip">
-                    <ul class="pl">{{ actividad.user.apellidoM }} {{ actividad.user.apellido }} {{ actividad.user.nombre }}</ul>
+                    <ul class="pl">{{ actividad.user.apellido }} {{ actividad.user.apellidoM }} {{ actividad.user.nombre }}</ul>
                     <ul id="estudianteUno">
                         {% if actividad.user_uno %}
-                        {{ actividad.user_uno.apellidoM }} {{ actividad.user_uno.apellido }} {{ actividad.user_uno.nombre }}
+                        {{ actividad.user_uno.apellido }} {{ actividad.user_uno.apellidoM }} {{ actividad.user_uno.nombre }}
                         {% endif %}
                     </ul>
                     <!-- Datos del tercer estudiante (estudiante_dos) -->
                     <ul id="estudianteDos">
                         {% if actividad.user_dos %}
-                        {{ actividad.user_dos.apellidoM }} {{ actividad.user_dos.apellido }} {{ actividad.user_dos.nombre }}
+                        {{ actividad.user_dos.apellido }} {{ actividad.user_dos.apellidoM }} {{ actividad.user_dos.nombre }}
                         {% endif %}
                     </ul>
                 </td>   
@@ -134,7 +134,7 @@
                 <td>{{ actividad.perestado }}</td>
                 <td class="des">
                     {% for comentario in actividad.comentarios_list %}
-                    {{ comentario.user.docente.titulo }} {{ comentario.user.apellidoM }} {{ comentario.user.apellido }} {{ comentario.user.nombre }}<br>
+                    {{ comentario.user.docente.titulo }} {{ comentario.user.apellido }} {{ comentario.user.apellidoM }} {{ comentario.user.nombre }}<br>
                         {{ comentario.percomentario }}<br>
                     {% endfor %}
                 </td>

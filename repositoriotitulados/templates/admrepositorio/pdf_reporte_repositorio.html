@@ -116,16 +116,16 @@
             <tr>
                 <td>{{ actividad.fecha }}</td>
                 <td id="estudiante">
-                    {{ actividad.estudiante.apellidoM }} {{ actividad.estudiante.apellido }} {{ actividad.estudiante.nombre }}
+                    {{ actividad.estudiante.apellido }} {{ actividad.estudiante.apellidoM }} {{ actividad.estudiante.nombre }}
                     <ul id="estudianteUno">
                         {% if actividad.estudiante_uno %}
-                        {{ actividad.estudiante_uno.apellidoM }} {{ actividad.estudiante_uno.apellido }} {{ actividad.estudiante_uno.nombre }}
+                        {{ actividad.estudiante_uno.apellido }} {{ actividad.estudiante_uno.apellidoM }} {{ actividad.estudiante_uno.nombre }}
                         {% endif %}
                     </ul>
                     <!-- Datos del tercer estudiante (estudiante_dos) -->
                     <ul id="estudianteDos">
                         {% if actividad.estudiante_dos %}
-                        {{ actividad.estudiante_dos.apellidoM }} {{ actividad.estudiante_dos.apellido }} {{ actividad.estudiante_dos.nombre }}
+                        {{ actividad.estudiante_dos.apellido }} {{ actividad.estudiante_dos.apellidoM }} {{ actividad.estudiante_dos.nombre }}
                         {% endif %}
                     </ul>
                 </td>
@@ -141,11 +141,11 @@
         </thead>
         <tbody>
             <tr>
-                <td>{{ actividad.tutor.docente.titulo }} {{ actividad.tutor.apellidoM }} {{ actividad.tutor.apellido }} {{ actividad.tutor.nombre }}</td>
+                <td>{{ actividad.tutor.docente.titulo }} {{ actividad.tutor.apellido }} {{ actividad.tutor.apellidoM }} {{ actividad.tutor.nombre }}</td>
                 <td class="descrip">
-                    {{ actividad.jurado_1.docente.titulo }} {{ actividad.jurado_1.apellidoM }} {{ actividad.jurado_1.apellido }} {{ actividad.jurado_1.nombre }}<br>
-                    {{ actividad.jurado_2.docente.titulo }} {{ actividad.jurado_2.apellidoM }} {{ actividad.jurado_2.apellido }} {{ actividad.jurado_2.nombre }}<br>
-                    {{ actividad.jurado_3.docente.titulo }} {{ actividad.jurado_3.apellidoM }} {{ actividad.jurado_3.apellido }} {{ actividad.jurado_3.nombre }}
+                    {{ actividad.jurado_1.docente.titulo }} {{ actividad.jurado_1.apellido }} {{ actividad.jurado_1.apellidoM }} {{ actividad.jurado_1.nombre }}<br>
+                    {{ actividad.jurado_2.docente.titulo }} {{ actividad.jurado_2.apellido }} {{ actividad.jurado_2.apellidoM }} {{ actividad.jurado_2.nombre }}<br>
+                    {{ actividad.jurado_3.docente.titulo }} {{ actividad.jurado_3.apellido }} {{ actividad.jurado_3.apellidoM }} {{ actividad.jurado_3.nombre }}
                 </td>
                 <td>{{ actividad.guia_externo }}</td>
             </tr>
