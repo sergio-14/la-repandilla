@@ -383,8 +383,9 @@
         <thead>
             <tr>
                 <th class="espaciosos"></th>
-                <th id="descripe"><br>
-                    CONSIDERACIONES FINALES: La defensa pública fue {{ acta.get_resultado_display }} con .................................................
+                <th id="descripe">
+                    NOTA FINALES:  {{ acta.get_notatotal_literal }} puntos.<br>
+                    CONSIDERACIONES FINALES: "{{ acta.get_observacion }}" la defensa fue "{{ acta.get_valorizacion }}".
                 </th>
                 <th class="espaciosos"></th>
             </tr>

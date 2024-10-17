@@ -78,15 +78,16 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-10 col-12 ">
-                        <p class="fecha colortext ">1er. Comentario evaluativo:  <span class="colorestados fechas">{{ acta.observacion_1 }}</span></p>
+                        <p class="fecha colortext ">Nota Total Literal:  <span class="colorestados fechas">{{ acta.get_notatotal_literal }}</span></p>
                     </div >
                     <div class="col-lg-10 col-12 ">
-                        <p class="fecha colortext ">2do. Comentario evaluativo:  <span class="colorestados fechas">{{ acta.observacion_2 }}</span></p>
+                        <p class="fecha colortext ">Observación:  <span class="colorestados fechas">{{ acta.get_observacion }}</span></p>
                     </div>
                     <div class="col-lg-10 col-12 ">
-                        <p class="fecha colortext ">3er. Comentario evaluativo:  <span class="colorestados fechas">{{ acta.observacion_3 }}</span></p>
+                        <p class="fecha colortext ">Valorización:  <span class="colorestados fechas">{{ acta.get_valorizacion }}</span></p>
                         
                     </div>
+                    
                 </div>
                 
             </div>

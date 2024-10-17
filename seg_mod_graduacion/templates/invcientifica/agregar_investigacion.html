@@ -18,11 +18,8 @@
         {% csrf_token %}
         <div id="extra-users" style="display: block {% if form.habilitar_users.value %}block{% else %}none{% endif %};">
           <div class="row">
-            <div class="col-md-6 col-11">
+            <div class="col-md-12 col-11">
               {{ form.user_uno|as_crispy_field }}
-            </div>
-            <div class="col-md-6 col-11">
-              {{ form.user_dos|as_crispy_field }}
             </div>
           </div>
         </div>

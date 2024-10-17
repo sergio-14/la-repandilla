@@ -12,11 +12,8 @@
         {% csrf_token %}
         <div id="extra-users" style="display: block {% if formp.habilitar_users.value %}block{% else %}none{% endif %};">
           <div class="row">
-            <div class="col-md-6 col-11">
+            <div class="col-md-12 col-11">
               {{ formp.user_uno|as_crispy_field }}
-            </div>
-            <div class="col-md-6 col-11">
-              {{ formp.user_dos|as_crispy_field }}
             </div>
           </div>
         </div>
@@ -44,13 +41,12 @@
         <input name="" id="" class="btn btn-primary me-2 fontII" type="submit" value="Enviar Información" {% if form_disabled %}disabled{% endif %}>
         <a href="{% url 'dashboard' %}" class="btn btn-danger fontII ">Cancelar</a>
         {% else %}
-            <p class="text-end text colorestados">Formulario deshabilitado. Su Perfil de a sido "Aprobado" o Debes tener la investigación "Aprobada" para agregar un perfil.</p>
+            <p class="text-end text colorestados">Formulario deshabilitado. Perfil "Aprobado" o Debe tener la investigación Cientifca "Aprobada" para agregar un perfil.</p>
         {% endif %}
       </form>
       {% block scripts %}
       <script>
         $("#id_user_uno").select2();
-        $("#id_user_dos").select2();
 
         const checkbox = document.getElementById('{{ formp.habilitar_users.id_for_label }}');
         const extraUsersDiv = document.getElementById('extra-users');

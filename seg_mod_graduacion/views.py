@@ -392,9 +392,7 @@ def buscar_estudiante_privada(request):
 
             if acta_proyecto:
                 data = {
-                    'acta': getattr(acta_proyecto.acta, 'id', acta_proyecto.acta) if acta_proyecto.acta else None,
                     'estudiante_uno': getattr(acta_proyecto.estudiante_uno, 'id', None),
-                    'estudiante_dos': getattr(acta_proyecto.estudiante_dos, 'id', None),
                     'titulo': getattr(acta_proyecto.titulo, 'id', acta_proyecto.titulo) if acta_proyecto.acta else None,
                     'lugar': getattr(acta_proyecto.lugar, 'id', acta_proyecto.lugar) if acta_proyecto.acta else None,
                     'tutor': getattr(acta_proyecto.tutor, 'id', None),
@@ -424,9 +422,7 @@ def buscar_estudiante_publica(request):
 
             if acta_proyecto:
                 data = {
-                    'acta': getattr(acta_proyecto.acta, 'id', acta_proyecto.acta) if acta_proyecto.acta else None,
                     'estudiante_uno': getattr(acta_proyecto.estudiante_uno, 'id', None),
-                    'estudiante_dos': getattr(acta_proyecto.estudiante_dos, 'id', None),
                     'titulo': getattr(acta_proyecto.titulo, 'id', acta_proyecto.titulo) if acta_proyecto.acta else None,
                     'lugar': getattr(acta_proyecto.lugar, 'id', acta_proyecto.lugar) if acta_proyecto.acta else None,
                     'tutor': getattr(acta_proyecto.tutor, 'id', None),
@@ -595,7 +591,6 @@ def buscar_estudiante_paractivar(request):
             if activar_estudiante:
                 data = {
                     'estudiante_uno': activar_estudiante.estudiante_uno.id if activar_estudiante.estudiante_uno else None,
-                    'estudiante_dos': activar_estudiante.estudiante_dos.id if activar_estudiante.estudiante_dos else None,
                     'tutor': activar_estudiante.tutor.id if activar_estudiante.tutor else None,
                     'jurado_1': activar_estudiante.jurado_1.id if activar_estudiante.jurado_1 else None,
                     'jurado_2': activar_estudiante.jurado_2.id if activar_estudiante.jurado_2 else None,
@@ -654,7 +649,7 @@ def crear_actividad(request):
         actividad = None
 
     # Verificar si el estudiante ya tiene un RepositorioTitulados asignado
-    repositorio_asignado = RepositorioTitulados.objects.filter(
+    repositorio_asignado = ActaPublica.objects.filter(
         Q(estudiante=estudiante) | Q(estudiante_uno=estudiante) | Q(estudiante_dos=estudiante)
     ).first()
 
@@ -751,7 +746,7 @@ def listaactividades(request):
     # Filtra las actividades que tienen el estado 'Preapro' y que no son 'Aprobado' ni 'Pendiente'
     actividades = ProyectoFinal.objects.filter(
         Q(tutor=usuario) | Q(jurado_1=usuario) | Q(jurado_2=usuario) | Q(jurado_3=usuario),
-        estado='Preapro'  # Filtra solo las actividades con estado 'Preapro'
+        estado='Proceso'  # Filtra solo las actividades con estado 'Preapro'
     ).exclude(
         Q(estado='Aprobado') | Q(estado='Pendiente')  # Excluye las actividades con estado 'Aprobado' o 'Pendiente'
     ).order_by('-fecha')
@@ -814,7 +809,7 @@ def aprobar_actividad(request, actividad_id):
         if form.is_valid():
             # Cambiar el estado a 'Preapro' si el checkbox está marcado y la actividad está en estado 'Pendiente'
             if form.cleaned_data['aprobar'] and actividad.estado == 'Pendiente':
-                actividad.estado = 'Preapro'
+                actividad.estado = 'Proceso'
                 actividad.save()
                 messages.success(request, 'Actividad aprobada exitosamente.')
 
@@ -1166,3 +1161,101 @@ def exportar_excel_perfiles(request):
     # Guardar el archivo en la respuesta
     wb.save(response)
     return response
+
+
+from .models import HabilitarTribunalesPerfil
+from .forms import HabilitarTribunalesPerfilForm, EditarHabilitarTribunalesPerfilForm
+
+
+def listar_tribunales_perfiles(request):
+    perfiles_list = HabilitarTribunalesPerfil.objects.all()
+
+    paginator = Paginator(perfiles_list, 8)  
+    page_number = request.GET.get('page')
+    perfiles = paginator.get_page(page_number)
+
+    return render(request, 'perfil/listar__tribunales_perfiles.html', {'perfiles': perfiles})
+
+
+def agregar_tribunales_perfil(request):
+    if request.method == 'POST':
+        form = HabilitarTribunalesPerfilForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_tribunales_perfiles')
+    else:
+        form = HabilitarTribunalesPerfilForm()
+    return render(request, 'perfil/agregar_tribunales_perfil.html', {'form': form})
+
+def editar_tribunales_perfil(request, pk):
+    perfil = get_object_or_404(HabilitarTribunalesPerfil, pk=pk)
+    if request.method == 'POST':
+        form = EditarHabilitarTribunalesPerfilForm(request.POST, instance=perfil)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_tribunales_perfiles')
+    else:
+        form = EditarHabilitarTribunalesPerfilForm(instance=perfil)
+
+        
+        form.fields['user'].widget.attrs['disabled'] = 'disabled'
+        form.fields['user_uno'].widget.attrs['disabled'] = 'disabled'
+
+    return render(request, 'perfil/editar_tribunales_perfil.html', {'form': form, 'perfil': perfil})
+
+def filtrartribunales(request):
+    user_id = request.GET.get('user_id', None)
+    
+    if user_id:
+        # Intenta obtener el PerfilProyecto del usuario seleccionado
+        try:
+            perfil = PerfilProyecto.objects.get(user_id=user_id, perestado='Aprobado')  # Solo perfiles aprobados
+            data = {
+                'user_uno': perfil.user_uno.id if perfil.user_uno else '',  # Si user_uno existe
+                'pertitulo': perfil.pertitulo,
+                'permodalidad': perfil.permodalidad.id,  # Si es una ForeignKey, pasamos el ID
+            }
+        except PerfilProyecto.DoesNotExist:
+            data = {
+                'error': 'No se encontró ningún Perfil Proyecto aprobado para este usuario.'
+            }
+    else:
+        data = {
+            'error': 'No se proporcionó un usuario válido.'
+        }
+
+    return JsonResponse(data)
+
+from django.core.exceptions import ObjectDoesNotExist
+def filtraracta(request):
+    user_id = request.GET.get('user_id', None)  # Obtenemos el ID del estudiante seleccionado
+    
+    if user_id and user_id.isdigit():  # Verifica si el ID del usuario es un número válido
+        try:
+            # Obtenemos el perfil de habilitación del estudiante con los datos relevantes
+            habilitar_perfil = HabilitarTribunalesPerfil.objects.get(user_id=user_id)
+            
+            # Construimos los datos que vamos a pasar
+            data = {
+                'titulo': habilitar_perfil.pertitulo,
+                'modalidad': habilitar_perfil.permodalidad.id,  # Pasamos el ID de la modalidad
+                'tutor': habilitar_perfil.tutor.id if habilitar_perfil.tutor else '',  # Verificamos si tutor existe
+                'jurado_1': habilitar_perfil.jurado_1.id if habilitar_perfil.jurado_1 else '',  # Verificamos si jurado_1 existe
+                'jurado_2': habilitar_perfil.jurado_2.id if habilitar_perfil.jurado_2 else '',  # Verificamos si jurado_2 existe
+                'jurado_3': habilitar_perfil.jurado_3.id if habilitar_perfil.jurado_3 else '',  # Verificamos si jurado_3 existe
+                'estudiante_uno': habilitar_perfil.user_uno.id if habilitar_perfil.user_uno else '',  # Verificamos si estudiante_uno existe
+            }
+        except ObjectDoesNotExist:
+            data = {
+                'error': 'necesita seleccionar al primer postulante para pasar los campos pregrabados.'
+            }
+        except Exception as e:
+            data = {
+                'error': f'Ocurrió un error inesperado: {str(e)}'
+            }
+    else:
+        data = {
+            'error': 'No se proporcionó un usuario válido o el ID no es un número.'
+        }
+
+    return JsonResponse(data)

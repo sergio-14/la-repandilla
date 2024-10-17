@@ -56,10 +56,10 @@
       <div class="col-md-7 col-lg-8 pb-5">
         <div class="card-body">
           <!-- Texto con formato pre -->
-          <pre class="fecha colorestados fontI">Modalidad: <span class="colortext">{{ proyecto.permodalidad.nombre }}</span>             Fecha: <span class="colortext">{{ proyecto.perfecha_creacion|date:"d/m/Y h:i:s A" }}</span></pre>
+          <pre class="fecha colorestados fontI">Modalidad: <span class="colortext">{{ proyecto.permodalidad.nombre }}</span>             Fecha: <span class="colortext">{{ proyecto.perfecha_creacion|date:"d/m/Y H:i:s" }}</span></pre>
           <!-- Título -->
           <h5 class="title colortitle fontI text-center ">{{ proyecto.pertitulo }}</h5>
-          <h5 class="fecha fontI colorestados">Estudiante: <span id="profileName" class="estado colortext">{{ proyecto.user.nombre }} {{ proyecto.user.apellido }} {{ proyecto.user.apellidoM }}</span></h5>
+          <h5 class="fecha fontI colorestados">Estudiante: <span id="profileName" class="estado colortext">{{ proyecto.user.apellido }} {{ proyecto.user.apellidoM }} {{ proyecto.user.nombre }}</span></h5>
           
           <!-- Descripción -->
           <p class="text colortext fontI ">Descripción:<br>{{ proyecto.perdescripcion }}</p>
@@ -85,7 +85,7 @@
           <h5 class="text fontI colortitle text-center">Comentarios</h5>
           {% for comentario in proyecto.comentarios.all %}
           <h6 class="text-end fontI  colorestados fechas">
-            {{ comentario.perfecha_post|date:"d/m/Y h:i:s A" }} por :  <span class="colortext fontI fecha">{{ comentario.user.docente.titulo }} {{ comentario.user.nombre }} {{ comentario.user.apellido }} {{ comentario.user.apellidoM }}</span>
+            {{ comentario.perfecha_post|date:"d/m/Y H:i:s" }} Revisado por el Docente:  <span class="colortext fontI fecha">{{ comentario.user.docente.titulo }} {{ comentario.user.apellido }} {{ comentario.user.apellidoM }} {{ comentario.user.nombre }}</span>
           </h6>
           <p class="comentario fontI colortext">{{ comentario.percomentario }}</p>
           {% if comentario.perdocorregido %}

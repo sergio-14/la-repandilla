@@ -3,60 +3,7 @@
 {% block title %}Crear Form{% endblock %}
 {% load static %}
 {% block content %}
-<script>
-  $(document).ready(function() {
-    // Inicializar select2 para todos los campos
-    $("#id_estudiante, #id_estudiante_uno, #id_estudiante_dos, #id_jurado_1, #id_jurado_2, #id_jurado_3").select2();
-  
-    // Función para actualizar las opciones
-    function actualizarOpciones() {
-      // Obtener valores seleccionados
-      var estudiante = $("#id_estudiante").val();
-      var estudiante_uno = $("#id_estudiante_uno").val();
-      var estudiante_dos = $("#id_estudiante_dos").val();
-  
-      var jurado_1 = $("#id_jurado_1").val();
-      var jurado_2 = $("#id_jurado_2").val();
-      var jurado_3 = $("#id_jurado_3").val();
-  
-      // Guardar todas las opciones seleccionadas en un array
-      var estudiantesSeleccionados = [estudiante, estudiante_uno, estudiante_dos];
-      var juradosSeleccionados = [jurado_1, jurado_2, jurado_3];
-  
-      // Limpiar y destruir select2 temporalmente para evitar problemas de visualización
-      $("#id_estudiante_uno, #id_estudiante_dos, #id_jurado_1, #id_jurado_2, #id_jurado_3").select2("destroy");
-  
-      // Ocultar las opciones seleccionadas en los select de estudiantes
-      $("#id_estudiante_uno option, #id_estudiante_dos option").each(function() {
-        if (estudiantesSeleccionados.includes($(this).val())) {
-          $(this).prop('disabled', true); // Deshabilitar la opción si ya está seleccionada
-        } else {
-          $(this).prop('disabled', false); // Habilitar si no está seleccionada
-        }
-      });
-  
-      // Ocultar las opciones seleccionadas en los select de jurados
-      $("#id_jurado_1 option, #id_jurado_2 option, #id_jurado_3 option").each(function() {
-        if (juradosSeleccionados.includes($(this).val())) {
-          $(this).prop('disabled', true); // Deshabilitar la opción si ya está seleccionada
-        } else {
-          $(this).prop('disabled', false); // Habilitar si no está seleccionada
-        }
-      });
-  
-      // Volver a inicializar select2 después de modificar las opciones
-      $("#id_estudiante_uno, #id_estudiante_dos, #id_jurado_1, #id_jurado_2, #id_jurado_3").select2();
-    }
-  
-    // Escuchar el evento de cambio en los select
-    $("#id_estudiante, #id_estudiante_uno, #id_estudiante_dos, #id_jurado_1, #id_jurado_2, #id_jurado_3").on('change', function() {
-      actualizarOpciones();
-    });
-  
-    // Llamar la función al inicio para aplicar el estado inicial
-    actualizarOpciones();
-  });
-</script>
+
 <div class="container no-gutters p-lg-5 p-3 font ">
   <div class="no-gutte container p-lg-5 p-0">
     <h1 class="text-center colortitle pb-2 titlesuperior">REGISTRO DE ACTA DEFENSA DE PERFIL DE PROYECTO</h1>
@@ -69,19 +16,31 @@
         {% csrf_token %}
         <div class="fechas fontI">
             <div class="row mb-3">
-              <div class="col-md-3 pt-1">
+              <div class="col-md-8 pt-1">
+                {{ form.estudiante.label_tag }}<br>{{ form.estudiante }}
+                {% if form.estudiante.errors %}
+                  <div class="text-danger">{{ form.estudiante.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-4 pt-1">
                 {{ form.carrera.label_tag }}<br>{{ form.carrera }}
                 {% if form.carrera.errors %}
                   <div class="text-danger">{{ form.carrera.errors }}</div>
                 {% endif %}
               </div>
-              <div class="col-md-3 pt-1">
+              <div class="col-md-4 pt-1">
+                {{ form.lugar.label_tag }}<br>{{ form.lugar }}
+                {% if form.lugar.errors %}
+                  <div class="text-danger">{{ form.lugar.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-4 pt-1">
                 {{ form.acta.label_tag }}<br>{{ form.acta }}
                 {% if form.acta.errors %}
                   <div class="text-danger">{{ form.acta.errors }}</div>
                 {% endif %}
               </div>
-              <div class="col-md-3 pt-1">
+              <div class="col-md-4 pt-1">
                 {{ form.perperiodo.label_tag }}<br>
                 <select name="perperiodo" class="form-control">
                     {% for periodo in ultimos_periodos %}
@@ -93,32 +52,22 @@
                 {% endif %}
               </div>
             
-              <div class="col-md-3 pt-1">
-                {{ form.tutor.label_tag }}<br>{{ form.tutor }}
-                {% if form.tutor.errors %}
-                  <div class="text-danger">{{ form.tutor.errors }}</div>
-                {% endif %}
-              </div>
+              
             </div>
             <div class="row mb-3">
-              <div class="col-md-4 pt-1">
-                {{ form.estudiante.label_tag }}<br>{{ form.estudiante }}
-                {% if form.estudiante.errors %}
-                  <div class="text-danger">{{ form.estudiante.errors }}</div>
-                {% endif %}
-              </div>
-              <div class="col-md-4 pt-1">
+              <div class="col-md-6 pt-1">
                 {{ form.estudiante_uno.label_tag }}<br>{{ form.estudiante_uno }}
                 {% if form.estudiante_uno.errors %}
                   <div class="text-danger">{{ form.estudiante_uno.errors }}</div>
                 {% endif %}
               </div>
-              <div class="col-md-4 pt-1">
-                {{ form.estudiante_dos.label_tag }}<br>{{ form.estudiante_dos }}
-                {% if form.estudiante_dos.errors %}
-                  <div class="text-danger">{{ form.estudiante_dos.errors }}</div>
+              <div class="col-md-6 pt-1">
+                {{ form.tutor.label_tag }}<br>{{ form.tutor }}
+                {% if form.tutor.errors %}
+                  <div class="text-danger">{{ form.tutor.errors }}</div>
                 {% endif %}
               </div>
+              
             </div>
             <div class="col-md-12 pt-1">
               {{ form.titulo.label_tag }}<br>{{ form.titulo }}
@@ -126,29 +75,23 @@
                 <div class="text-danger">{{ form.titulo.errors }}</div>
               {% endif %}
             </div>
-            <div class="row mb-3 pt-2">
-              <div class="col-md-3 pt-1">
-                {{ form.lugar.label_tag }}<br>{{ form.lugar }}
-                {% if form.lugar.errors %}
-                  <div class="text-danger">{{ form.lugar.errors }}</div>
-                {% endif %}
-              </div>
-              <div class="col-md-3 pt-1">
+            <div class="row mb-4 pt-2">
+              <div class="col-md-4 pt-1">
                 {{ form.fechadefensa.label_tag }}<br>{{ form.fechadefensa }}
                 {% if form.fechadefensa.errors %}
                   <div class="text-danger">{{ form.fechadefensa.errors }}</div>
                 {% endif %}
               </div>
-              <div class="col-md-3 pt-1">
+              <div class="col-md-4 pt-1">
                 {{ form.horainicio.label_tag }}<br>{{ form.horainicio }}
                 {% if form.horainicio.errors %}
-                  <div class="text-danger">{{ form.horainicio.errors }}</div>
+                    <div class="text-danger">{{ form.horainicio.errors }}</div>
                 {% endif %}
               </div>
-              <div class="col-md-3 pt-1">
+              <div class="col-md-4 pt-1">
                 {{ form.horafin.label_tag }}<br>{{ form.horafin }}
                 {% if form.horafin.errors %}
-                  <div class="text-danger">{{ form.horafin.errors }}</div>
+                    <div class="text-danger">{{ form.horafin.errors }}</div>
                 {% endif %}
               </div>
             </div>
@@ -213,7 +156,53 @@
 
       </form>
       {% block scripts %}
+      
       <script>
+        $(document).ready(function() {
+          // Cuando el campo del estudiante cambia
+          $('#id_estudiante').change(function() {
+              var userId = $(this).val();  // Obtiene el ID del estudiante seleccionado
+      
+              // Verifica si se seleccionó un usuario válido
+              if (userId) {
+                  $.ajax({
+                      url: '/filtraracta/',  // La URL a la que se hace la solicitud
+                      data: {
+                          'user_id': userId  // Parámetro que se envía al servidor
+                      },
+                      dataType: 'json',
+                      success: function(data) {
+                          if (data.error) {
+                              alert(data.error);  // Muestra el error si lo hay
+                          } else {
+                              // Llenamos los campos del formulario con los datos obtenidos
+                              $('#id_titulo').val(data.titulo);
+                              $('#id_modalidad').val(data.modalidad);
+                              $('#id_tutor').val(data.tutor);
+                              $('#id_jurado_1').val(data.jurado_1);
+                              $('#id_jurado_2').val(data.jurado_2);
+                              $('#id_jurado_3').val(data.jurado_3);
+                              $('#id_estudiante_uno').val(data.estudiante_uno);
+                          }
+                      },
+                      error: function(xhr, status, error) {
+                          console.error("Ocurrió un error: " + error);
+                      }
+                  });
+              } else {
+                  // Limpia los campos si no hay un estudiante seleccionado
+                  $('#id_titulo').val('');
+                  $('#id_modalidad').val('');
+                  $('#id_tutor').val('');
+                  $('#id_jurado_1').val('');
+                  $('#id_jurado_2').val('');
+                  $('#id_jurado_3').val('');
+                  $('#id_estudiante_uno').val('');
+                  alert("Por favor selecciona un estudiante válido.");
+              }
+          });
+      });
+      
         // Función para mostrar el modal de confirmación
         function showConfirmationModal(event) {
           event.preventDefault();

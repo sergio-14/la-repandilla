@@ -20,24 +20,14 @@
 
             </span> {{ actividad.estudiante_uno }}
           </p>
-          <p id="id_estudiante_dos" class="fontI text colortext">
-            <span class="colorestados">3er. Estudiante:
-
-            </span> {{ actividad.estudiante_dos }}
-          </p>
           <script>
             document.addEventListener('DOMContentLoaded', function() {
                 // Seleccionamos los elementos por sus IDs
                 var estudianteUno = document.getElementById('id_estudiante_uno');
-                var estudianteDos = document.getElementById('id_estudiante_dos');
         
                 // Comprobamos si el contenido de estudiante es 'None' o está vacío
                 if (estudianteUno && (estudianteUno.textContent.trim() === '' || estudianteUno.textContent.trim() === 'None')) {
                     estudianteUno.style.display = 'none';  // Ocultamos el li de estudiante_uno
-                }
-        
-                if (estudianteDos && (estudianteDos.textContent.trim() === '' || estudianteDos.textContent.trim() === 'None')) {
-                    estudianteDos.style.display = 'none';  // Ocultamos el li de estudiante_dos
                 }
             });
           </script>

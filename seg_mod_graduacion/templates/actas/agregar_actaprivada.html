@@ -12,19 +12,31 @@
         {% csrf_token %}
         <div class="fechas fontI">
             <div class="row mb-3">
-              <div class="col-md-3 pt-1">
+              <div class="col-md-8 pt-1">
+                {{ form.estudiante.label_tag }}<br>{{ form.estudiante }}
+                {% if form.estudiante.errors %}
+                  <div class="text-danger">{{ form.estudiante.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-4 pt-1">
                 {{ form.carrera.label_tag }}<br>{{ form.carrera }}
                 {% if form.carrera.errors %}
                   <div class="text-danger">{{ form.carrera.errors }}</div>
                 {% endif %}
               </div>
-              <div class="col-md-3 pt-1">
+              <div class="col-md-4 pt-1">
+                {{ form.lugar.label_tag }}<br>{{ form.lugar }}
+                {% if form.lugar.errors %}
+                  <div class="text-danger">{{ form.lugar.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-4 pt-1">
                 {{ form.acta.label_tag }}<br>{{ form.acta }}
                 {% if form.acta.errors %}
                   <div class="text-danger">{{ form.acta.errors }}</div>
                 {% endif %}
               </div>
-              <div class="col-md-3 pt-1">
+              <div class="col-md-4 pt-1">
                 {{ form.perperiodo.label_tag }}<br>
                 <select name="perperiodo" class="form-control">
                     {% for periodo in ultimos_periodos %}
@@ -35,31 +47,18 @@
                     <div class="text-danger">{{ form.perperiodo.errors }}</div>
                 {% endif %}
               </div>
-            
-              <div class="col-md-3 pt-1">
-                {{ form.tutor.label_tag }}<br>{{ form.tutor }}
-                {% if form.tutor.errors %}
-                  <div class="text-danger">{{ form.tutor.errors }}</div>
-                {% endif %}
-              </div>
             </div>
             <div class="row mb-3">
-              <div class="col-md-4 pt-1">
-                {{ form.estudiante.label_tag }}<br>{{ form.estudiante }}
-                {% if form.estudiante.errors %}
-                  <div class="text-danger">{{ form.estudiante.errors }}</div>
-                {% endif %}
-              </div>
-              <div class="col-md-4 pt-1">
+              <div class="col-md-6 pt-1">
                 {{ form.estudiante_uno.label_tag }}<br>{{ form.estudiante_uno }}
                 {% if form.estudiante_uno.errors %}
                   <div class="text-danger">{{ form.estudiante_uno.errors }}</div>
                 {% endif %}
               </div>
-              <div class="col-md-4 pt-1">
-                {{ form.estudiante_dos.label_tag }}<br>{{ form.estudiante_dos }}
-                {% if form.estudiante_dos.errors %}
-                  <div class="text-danger">{{ form.estudiante_dos.errors }}</div>
+              <div class="col-md-6 pt-1">
+                {{ form.tutor.label_tag }}<br>{{ form.tutor }}
+                {% if form.tutor.errors %}
+                  <div class="text-danger">{{ form.tutor.errors }}</div>
                 {% endif %}
               </div>
             </div>
@@ -70,25 +69,20 @@
               {% endif %}
             </div>
             <div class="row mb-3 pt-2">
-              <div class="col-md-3 pt-1">
-                {{ form.lugar.label_tag }}<br>{{ form.lugar }}
-                {% if form.lugar.errors %}
-                  <div class="text-danger">{{ form.lugar.errors }}</div>
-                {% endif %}
-              </div>
-              <div class="col-md-3 pt-1">
+              
+              <div class="col-md-4 pt-1">
                 {{ form.fechadefensa.label_tag }}<br>{{ form.fechadefensa }}
                 {% if form.fechadefensa.errors %}
                   <div class="text-danger">{{ form.fechadefensa.errors }}</div>
                 {% endif %}
               </div>
-              <div class="col-md-3 pt-1">
+              <div class="col-md-4 pt-1">
                 {{ form.horainicio.label_tag }}<br>{{ form.horainicio }}
                 {% if form.horainicio.errors %}
                   <div class="text-danger">{{ form.horainicio.errors }}</div>
                 {% endif %}
               </div>
-              <div class="col-md-3 pt-1">
+              <div class="col-md-4 pt-1">
                 {{ form.horafin.label_tag }}<br>{{ form.horafin }}
                 {% if form.horafin.errors %}
                   <div class="text-danger">{{ form.horafin.errors }}</div>
@@ -193,9 +187,7 @@
     .then(response => response.json())
     .then(data => {
       if (data) {
-        document.getElementById('id_acta').value = data.acta !== null ? data.acta : '';
         document.getElementById('id_estudiante_uno').value = data.estudiante_uno !== null ? data.estudiante_uno : '';
-        document.getElementById('id_estudiante_dos').value = data.estudiante_dos !== null ? data.estudiante_dos : '';
         document.getElementById('id_titulo').value = data.titulo !== null ? data.titulo : '';
         document.getElementById('id_lugar').value = data.lugar !== null ? data.lugar : '';
         document.getElementById('id_tutor').value = data.tutor !== null ? data.tutor : '';
@@ -222,7 +214,6 @@
     const estudianteSelects = [
       document.getElementById('id_estudiante'),
       document.getElementById('id_estudiante_uno'),
-      document.getElementById('id_estudiante_dos')
     ];
     
     const juradoSelects = [

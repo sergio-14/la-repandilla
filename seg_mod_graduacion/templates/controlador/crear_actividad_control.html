@@ -18,17 +18,14 @@
           {% csrf_token %}
           <div class="fechas">
             <div class="row mb-3">
-              <div class="col-md-12 pt-1">
+              <div class="col-md-7 pt-1">
                 {{ form.estudiante.label_tag }} <br>{{ form.estudiante }}
+              </div>
+              <div class="col-md-5 pt-1">
+                {{ form.estudiante_uno.label_tag }} <br>{{ form.estudiante_uno }}
               </div>
             </div><br>
             <div class="row mb-3">
-              <div class="col-md-6 pt-1">
-                {{ form.estudiante_uno.label_tag }} <br>{{ form.estudiante_uno }}
-              </div>
-              <div class="col-md-6 pt-1">
-                {{ form.estudiante_dos.label_tag }} <br>{{ form.estudiante_dos }}
-              </div>
               <div class="col-md-6 pt-1">
                 {{ form.tutor.label_tag }} <br>{{ form.tutor }}
               </div>
@@ -85,7 +82,6 @@
     .then(data => {
       if (data) {
         document.getElementById('id_estudiante_uno').value = data.estudiante_uno !== null ? data.estudiante_uno : '';
-        document.getElementById('id_estudiante_dos').value = data.estudiante_dos !== null ? data.estudiante_dos : '';
         document.getElementById('id_tutor').value = data.tutor !== null ? data.tutor : '';
         document.getElementById('id_jurado_1').value = data.jurado_1 !== null ? data.jurado_1 : '';
         document.getElementById('id_jurado_2').value = data.jurado_2 !== null ? data.jurado_2 : '';
@@ -109,7 +105,6 @@
     const estudianteSelects = [
       document.getElementById('id_estudiante'),
       document.getElementById('id_estudiante_uno'),
-      document.getElementById('id_estudiante_dos')
     ];
     
     const juradoSelects = [

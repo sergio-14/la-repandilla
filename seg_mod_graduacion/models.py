@@ -4,6 +4,8 @@ from django.contrib.auth import get_user_model
 from datetime import date
 from django.conf import settings
 from django.core.exceptions import ValidationError  
+import inflect 
+from num2words import num2words
 
 User = get_user_model()
 
@@ -11,7 +13,7 @@ ESTADO_CHOICES = [
     ('Aprobado', 'Aprobado'),
     ('Pendiente', 'Pendiente'),
     ('Rechazado', 'Rechazado'),
-    ('Preapro', 'Preapro'),
+    ('Proceso', 'Proceso'),
 ]
 
 RESULTADO_CHOICES = [
@@ -181,10 +183,27 @@ class ComentarioPerfil(models.Model):
         return self.percomentario[:15] + '...' if len(self.percomentario) > 15 else self.percomentario
 
 
+class HabilitarTribunalesPerfil(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Usuario relacionado', related_name='habilitar_user')
+    user_uno = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Segundo participante', blank=True, null=True, related_name='habilitar_user_uno')
+    pertitulo = models.CharField(max_length=450, verbose_name='Agregar Título Acta')
+    permodalidad = models.ForeignKey(Modalidad, on_delete=models.CASCADE, verbose_name='Seleccione Una Modalidad')
+    tutor = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='habilitar_tutor', on_delete=models.CASCADE, verbose_name='Tutor')
+    jurado_1 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='habilitar_jurado_1', on_delete=models.CASCADE, verbose_name='Jurado 1')
+    jurado_2 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='habilitar_jurado_2', on_delete=models.CASCADE, verbose_name='Jurado 2')
+    jurado_3 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='habilitar_jurado_3', on_delete=models.CASCADE, verbose_name='Jurado 3')
+    
+    class Meta:
+        verbose_name_plural = "Habilitar Tribunales Perfil"
+        verbose_name = "Habilitar Tribunal Perfil"
+    
+    def __str__(self):
+        return self.pertitulo
+
 class ActaGeneral(models.Model):
-    carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
+    carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE, default='Ingeniría de Sistemas')
     perperiodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, null=True)
-    acta = models.CharField(max_length=30)
+    acta = models.CharField(max_length=30, unique=True)
     estudiante = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_estudiante', on_delete=models.CASCADE)
     estudiante_uno = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Segundo participante', blank=True, null=True, related_name='acta_estudianteuno')
     estudiante_dos = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Tercer participante', blank=True, null=True, related_name='acta_estudiantedos')
@@ -198,7 +217,7 @@ class ActaGeneral(models.Model):
     jurado_2 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_jurado_2', on_delete=models.CASCADE)
     jurado_3 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_jurado_3', on_delete=models.CASCADE)
     modalidad = models.ForeignKey('Modalidad', on_delete=models.CASCADE, verbose_name='Seleccione Una Modalidad')
-    resultado = models.CharField(max_length=15, choices=RESULTADO_CHOICES, default='Suficiente')
+    resultado = models.CharField(max_length=15, choices=RESULTADO_CHOICES, default='Insuficiente')
     observacion_1 = models.TextField(max_length=200)
     observacion_2 = models.TextField(max_length=200)
     observacion_3 = models.TextField(max_length=200)
@@ -233,7 +252,8 @@ class ActaPrivada(ActaGeneral):
         if not self.pk:  # Es una nueva instancia
             self.acta  # Personaliza según tu lógica
         super(ActaGeneral, self).save(*args, **kwargs)
-    
+
+
 class ActaPublica(ActaGeneral):
     calificacion1 = models.IntegerField()
     calificacion2 = models.IntegerField()
@@ -248,6 +268,37 @@ class ActaPublica(ActaGeneral):
         if not self.pk:  # Es una nueva instancia
             self.acta # Personaliza según tu lógica
         super(ActaGeneral, self).save(*args, **kwargs)
+    
+    # Método para obtener la notatotal en palabras
+    def get_notatotal_literal(self):
+        # Convertimos el número a palabras en español
+        return num2words(self.notatotal, lang='es')
+
+    # Método para generar observación según el rango de la notatotal
+    def get_observacion(self):
+        if self.notatotal == 50:
+            return "Postergado y/o reprobado"
+        elif 51 <= self.notatotal <= 79:
+            return "Aprobado"
+        elif 80 <= self.notatotal <= 89:
+            return "Aprobado con felicitaciones"
+        elif 90 <= self.notatotal <= 100:
+            return "Aprobado con mención honorífica y recomendación de publicación"
+        else:
+            return "Sin observación"
+
+    # Método para generar valorización basada en la notatotal
+    def get_valorizacion(self):
+        if self.notatotal == 50:
+            return "Insuficiente"
+        elif 51 <= self.notatotal <= 79:
+            return "Buena"
+        elif 80 <= self.notatotal <= 89:
+            return "Sobresaliente"
+        elif 90 <= self.notatotal <= 100:
+            return "Excelente"
+        else:
+            return "Sin valorización"
 
 class HabilitarProyectoFinal(models.Model):
     estudiante = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='actividad_estudiante', on_delete=models.CASCADE)

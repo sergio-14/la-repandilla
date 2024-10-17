@@ -66,7 +66,11 @@ urlpatterns = [
     
     
     path('aprobar_actividad/<int:actividad_id>/', views.aprobar_actividad, name='aprobar_actividad'),
-    
+    path('habilitar_perfiles/', views.listar_tribunales_perfiles, name='listar_tribunales_perfiles'),
+    path('habilitar_perfiles/agregar/', views.agregar_tribunales_perfil, name='agregar_tribunales_perfil'),
+    path('habilitar_perfiles/editar/<int:pk>/', views.editar_tribunales_perfil, name='editar_tribunales_perfil'),
+    path('filtrartribunales/', views.filtrartribunales, name='filtrartribunales'),
+    path('filtraracta/', views.filtraracta, name='filtraracta'), 
 ]
-#+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+#+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) filtrartribunales
 handler403 = handle_permission_denied
