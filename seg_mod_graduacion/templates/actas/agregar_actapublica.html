@@ -117,17 +117,10 @@
               </div>
             </div>
             <div class="row mb-3">
-              <div class="col-md-3 pt-1">
+              <div class="col-md-6 pt-1">
                 {{ form.modalidad.label_tag }}<br>{{ form.modalidad }}
                 {% if form.modalidad.errors %}
                   <div class="text-danger">{{ form.modalidad.errors }}</div>
-                {% endif %}
-              </div>
-              <div class="col-md-3 pt-1">
-                {% comment %} {{ form.resultado.label_tag }}{% endcomment %}
-                <br>{{ form.resultado }} 
-                {% if form.resultado.errors %}
-                  <div class="text-danger">{{ form.resultado.errors }}</div>
                 {% endif %}
               </div>
               <div class="col-md-2 col-4 pt-1">
@@ -151,6 +144,13 @@
                 <input type="number" id="id_notatotal" name="notatotal" value="{{ form.notatotal.value }}" class="form-control" min="0" max="100" readonly>
                 {% if form.notatotal.errors %}
                   <div class="text-danger">{{ form.notatotal.errors }}</div>
+                {% endif %}
+              </div>
+              <div class="col-md-3 pt-1">
+                {% comment %} {{ form.resultado.label_tag }}{% endcomment %}
+                <br>{{ form.resultado }} 
+                {% if form.resultado.errors %}
+                  <div class="text-danger">{{ form.resultado.errors }}</div>
                 {% endif %}
               </div>
             </div>

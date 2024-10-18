@@ -71,6 +71,9 @@ urlpatterns = [
     path('habilitar_perfiles/editar/<int:pk>/', views.editar_tribunales_perfil, name='editar_tribunales_perfil'),
     path('filtrartribunales/', views.filtrartribunales, name='filtrartribunales'),
     path('filtraracta/', views.filtraracta, name='filtraracta'), 
+    
+    path('agregar_viadiplomado/', views.agregar_viadiplomado, name='agregar_viadiplomado'),
+    path('proyectofinal/acta_viadiplomado_list', views.actaviadiplomado_list, name='actaviadiplomado_list'),
 ]
 #+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) filtrartribunales
 handler403 = handle_permission_denied

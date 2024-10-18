@@ -31,42 +31,7 @@ class T_Fase(models.Model):
     
     def __str__(self):
         return self.S_Fase 
-    
-class T_Gestion(models.Model):
-    Id_Ges=models.AutoField(primary_key=True)
-    S_Gestion= models.CharField(max_length=100,verbose_name='Gestion y periodo')
-    
-    class Meta:
-        verbose_name_plural = "Periodo y Gestion"
-        verbose_name = "Periodo Gestion"
-    
-    def __str__(self):
-        return self.S_Gestion
-    
-class T_Semestre(models.Model):
-    Id_Semestre= models.AutoField(primary_key=True)
-    S_Semestre=models.CharField(max_length=100,verbose_name='Semestre')
-    
-    class Meta:
-        verbose_name_plural = "Semestres"
-        verbose_name = "Semestre"
-    
-    def __str__(self):
-        return self.S_Semestre 
-
-class T_Materia(models.Model):
-    Id_Materia= models.AutoField(primary_key=True)
-    S_Materia=models.CharField(max_length=100,verbose_name='Materia')
-    T_Semestre=models.ForeignKey(T_Semestre, on_delete=models.CASCADE, verbose_name="Semestre")
-    
-    class Meta:
-        verbose_name_plural = "Materias"
-        verbose_name = "Materia"
         
-    def __str__(self):
-        return self.S_Materia
-    
-    
 class T_Proyectos_IIISP(models.Model):
     Id_Proyect = models.AutoField(primary_key=True)
     S_persona = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Usuario relacionado')

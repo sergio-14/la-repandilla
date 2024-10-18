@@ -19,9 +19,6 @@ ESTADO_CHOICES = [
 RESULTADO_CHOICES = [
     ('Suficiente', 'Suficiente'),
     ('Insuficiente', 'Insuficiente'),
-    ('Aprobado', 'Aprobado'),
-    ('Reprobado', 'Reprobado'),
-    ('Postergado', 'Postergado')
 ]
 
 class Modalidad(models.Model):
@@ -200,13 +197,12 @@ class HabilitarTribunalesPerfil(models.Model):
     def __str__(self):
         return self.pertitulo
 
-class ActaGeneral(models.Model):
-    carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE, default='Ingeniría de Sistemas')
+class ActaProyectoPerfil(models.Model):
+    carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE )
     perperiodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, null=True)
-    acta = models.CharField(max_length=30, unique=True)
+    acta = models.CharField(max_length=30, unique=True )
     estudiante = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_estudiante', on_delete=models.CASCADE)
     estudiante_uno = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Segundo participante', blank=True, null=True, related_name='acta_estudianteuno')
-    estudiante_dos = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Tercer participante', blank=True, null=True, related_name='acta_estudiantedos')
     titulo = models.CharField(max_length=450)
     lugar = models.CharField(max_length=50)
     fechadefensa = models.DateField(default=timezone.now)
@@ -217,7 +213,7 @@ class ActaGeneral(models.Model):
     jurado_2 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_jurado_2', on_delete=models.CASCADE)
     jurado_3 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_jurado_3', on_delete=models.CASCADE)
     modalidad = models.ForeignKey('Modalidad', on_delete=models.CASCADE, verbose_name='Seleccione Una Modalidad')
-    resultado = models.CharField(max_length=15, choices=RESULTADO_CHOICES, default='Insuficiente')
+    resultado = models.CharField(max_length=15, choices=RESULTADO_CHOICES, default='Suficiente')
     observacion_1 = models.TextField(max_length=200)
     observacion_2 = models.TextField(max_length=200)
     observacion_3 = models.TextField(max_length=200)
@@ -229,32 +225,91 @@ class ActaGeneral(models.Model):
     def __str__(self):
         return self.acta
     
-class ActaProyectoPerfil(ActaGeneral):
-    pass
-    
-    class Meta:
-        verbose_name_plural = "Actas Defensa Perfiles"
-        verbose_name = "Acta Perfil"
-        
     def save(self, *args, **kwargs):
         if not self.pk:  # Es una nueva instancia
-            self.acta # Personaliza según tu lógica
-        super(ActaGeneral, self).save(*args, **kwargs)
-
-class ActaPrivada(ActaGeneral):
+            if not self.carrera:
+                self.carrera = Carrera.objects.get(nombre='Ingeniería de Sistemas')
+            super(ActaProyectoPerfil, self).save(*args, **kwargs)
+    
+class ActaViaDiplomado(models.Model):
+    carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE)
+    perperiodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, null=True)
+    acta = models.CharField(max_length=30, unique=True )
+    estudiante = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_via_estudiante', on_delete=models.CASCADE)
+    estudiante_uno = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Segundo participante', blank=True, null=True, related_name='acta_via_estudianteuno')
+    titulo = models.CharField(max_length=450)
+    lugar = models.CharField(max_length=50)
+    fechadefensa = models.DateField(default=timezone.now)
+    horainicio = models.TimeField()
+    horafin = models.TimeField()
+    modalidad = models.ForeignKey('Modalidad', on_delete=models.CASCADE, verbose_name='Seleccione Una Modalidad')
+    presidente = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_via_presidente', on_delete=models.CASCADE)
+    secretario = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_via_secretario', on_delete=models.CASCADE)
+    vocal_1 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_via_vocal_1', on_delete=models.CASCADE)
+    vocal_2 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_via_vocal_2', on_delete=models.CASCADE)
+    valor_1 = models.IntegerField()
+    valor_2 = models.IntegerField()
+    valor_3 = models.IntegerField()
+    totalnota = models.IntegerField()
+   
+class ActaPrivada(models.Model):
+    carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE )
+    perperiodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, null=True)
+    acta = models.CharField(max_length=30, unique=True )
+    estudiante = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_pri_estudiante', on_delete=models.CASCADE)
+    estudiante_uno = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Segundo participante', blank=True, null=True, related_name='acta_pri_estudianteuno')
+    titulo = models.CharField(max_length=450)
+    lugar = models.CharField(max_length=50)
+    fechadefensa = models.DateField(default=timezone.now)
+    horainicio = models.TimeField()
+    horafin = models.TimeField()
+    tutor = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_pri_tutor', on_delete=models.CASCADE)
+    jurado_1 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_pri_jurado_1', on_delete=models.CASCADE)
+    jurado_2 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_pri_jurado_2', on_delete=models.CASCADE)
+    jurado_3 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_pri_jurado_3', on_delete=models.CASCADE)
+    modalidad = models.ForeignKey('Modalidad', on_delete=models.CASCADE, verbose_name='Seleccione Una Modalidad')
+    resultado = models.CharField(max_length=15, choices=RESULTADO_CHOICES, default='Suficiente')
+    observacion_1 = models.TextField(max_length=200)
+    observacion_2 = models.TextField(max_length=200)
+    observacion_3 = models.TextField(max_length=200)
     calificacion1 = models.IntegerField()
+    
     
     class Meta:
         verbose_name_plural = "Actas defensa Privada"
         verbose_name = "Acta Privada"
     
+    def __str__(self):
+        return self.acta
+    
     def save(self, *args, **kwargs):
         if not self.pk:  # Es una nueva instancia
-            self.acta  # Personaliza según tu lógica
-        super(ActaGeneral, self).save(*args, **kwargs)
+            if not self.carrera:
+                self.carrera = Carrera.objects.get(nombre='Ingeniería de Sistemas')
+            super(ActaPrivada, self).save(*args, **kwargs)
+    
 
 
-class ActaPublica(ActaGeneral):
+class ActaPublica(models.Model):
+    carrera = models.ForeignKey(Carrera, on_delete=models.CASCADE )
+    perperiodo = models.ForeignKey(Periodo, on_delete=models.CASCADE, null=True)
+    acta = models.CharField(max_length=30, unique=True )
+    estudiante = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_pub_estudiante', on_delete=models.CASCADE)
+    estudiante_uno = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Segundo participante', blank=True, null=True, related_name='acta_pub_estudianteuno')
+    titulo = models.CharField(max_length=450)
+    lugar = models.CharField(max_length=50)
+    fechadefensa = models.DateField(default=timezone.now)
+    horainicio = models.TimeField()
+    horafin = models.TimeField()
+    tutor = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_pub_tutor', on_delete=models.CASCADE)
+    jurado_1 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_pub_jurado_1', on_delete=models.CASCADE)
+    jurado_2 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_pub_jurado_2', on_delete=models.CASCADE)
+    jurado_3 = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='acta_pub_jurado_3', on_delete=models.CASCADE)
+    modalidad = models.ForeignKey('Modalidad', on_delete=models.CASCADE, verbose_name='Seleccione Una Modalidad')
+    resultado = models.CharField(max_length=15, choices=RESULTADO_CHOICES, default='Suficiente')
+    observacion_1 = models.TextField(max_length=200)
+    observacion_2 = models.TextField(max_length=200)
+    observacion_3 = models.TextField(max_length=200)
     calificacion1 = models.IntegerField()
     calificacion2 = models.IntegerField()
     notatotal = models.IntegerField()
@@ -264,10 +319,8 @@ class ActaPublica(ActaGeneral):
         verbose_name_plural = "Actas Defensa Publica"
         verbose_name = "Acta Publica"
     
-    def save(self, *args, **kwargs):
-        if not self.pk:  # Es una nueva instancia
-            self.acta # Personaliza según tu lógica
-        super(ActaGeneral, self).save(*args, **kwargs)
+    def __str__(self):
+        return self.acta
     
     # Método para obtener la notatotal en palabras
     def get_notatotal_literal(self):

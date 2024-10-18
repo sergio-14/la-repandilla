@@ -557,8 +557,43 @@ class Pdf_ReporteActaPublica(View):
         
         # Retornar el PDF como respuesta
         return HttpResponse(pdf, content_type='application/pdf')
+  
+  
     
+from .forms import ActaViaDiplomadoForm
+def agregar_viadiplomado(request):
+    ultimos_periodos = Periodo.objects.all().order_by('-gestion__anio','-numero')[:2]
+    if request.method == 'POST':
+        form = ActaViaDiplomadoForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('actaviadiplomado_list')  # Redirige a una vista de lista de actas (puedes cambiarla según tu necesidad)
+    else:
+        form = ActaViaDiplomadoForm()
 
+    return render(request, 'actas/agregar_viadiplomado.html', {
+        'form': form,
+        'ultimos_periodos': ultimos_periodos ,
+        })
+    
+    
+from .models import ActaViaDiplomado
+def actaviadiplomado_list(request):
+    query = request.GET.get('q')  
+    actas_list = ActaViaDiplomado.objects.all().order_by('-id')
+
+    if query:
+        actas_list = actas_list.filter(
+            Q(estudiante__nombre__icontains=query) |
+            Q(estudiante__apellido__icontains=query)
+        )
+
+    paginator = Paginator(actas_list, 3) 
+    page_number = request.GET.get('page')
+    actas = paginator.get_page(page_number)
+    
+    return render(request, 'proyectofinal/actaviadiplomado_list.html', {'actas': actas, 'query': query})
+    
 ### VISTA PARA EL ESTUDIANTE ###
 ###############################################################
 
